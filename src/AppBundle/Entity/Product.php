@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
@@ -36,9 +37,8 @@ class Product
     private $description;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="seller", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="products")
+     * @ORM\JoinColumn(name="seller_id", referencedColumnName="id")
      */
     private $seller;
 
@@ -85,7 +85,6 @@ class Product
     /**
      * @var array
      *
-     * @ORM\Column(name="buyers", type="array")
      */
     private $buyers;
 
@@ -151,11 +150,11 @@ class Product
     /**
      * Set seller
      *
-     * @param string $seller
+     * @param User $seller
      *
      * @return Product
      */
-    public function setSeller($seller)
+    public function setSeller(User $seller)
     {
         $this->seller = $seller;
 
@@ -165,7 +164,7 @@ class Product
     /**
      * Get seller
      *
-     * @return string
+     * @return User
      */
     public function getSeller()
     {
@@ -314,6 +313,22 @@ class Product
     public function getBuyers()
     {
         return $this->buyers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImageForm()
+    {
+        return $this->image_form;
+    }
+
+    /**
+     * @param mixed $image_form
+     */
+    public function setImageForm($image_form)
+    {
+        $this->image_form = $image_form;
     }
 }
 
