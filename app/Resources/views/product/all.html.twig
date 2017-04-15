@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>All Products</h1>
+    <div></div>
     <table class="table table-responsive table-striped">
         <thead>
         <tr>
@@ -18,7 +20,7 @@
             <tr>
                 <td>{{ product.id }}</td>
                 <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
-                <td>{{ product.name }}</td>
+                <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
                 <td>{{ product.description }}</td>
                 <td>{{ product.quantity }}</td>
                 <td>{{ product.price }}</td>

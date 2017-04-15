@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
 use AppBundle\Form\AddProductType;
+use AppBundle\Form\ProductEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -20,8 +21,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * @Route("product/all", name="all_products")
-     * @return Response
+     * @Route("/", name="homepage")
      */
     public function listAllProductsAction()
     {
@@ -29,6 +29,17 @@ class ProductsController extends Controller
 
         return $this->render(":product:all.html.twig", [
             "products" => $products
+        ]);
+    }
+
+    /**
+     * @Route("product/details/{id}", name="product_details")
+     * @return Response
+     */
+    public function productDetailsAction(Product $product)
+    {
+        return $this->render(":product:details.html.twig", [
+            "product" => $product
         ]);
     }
 
@@ -82,8 +93,7 @@ class ProductsController extends Controller
 
                 $this->get('session')->getFlashBag()->add('success', 'Product is created successfully!');
 
-                return $this->redirectToRoute('user_profile');
-               // return $this->redirectToRoute('', ['id' => $product->getId()]);
+                return $this->redirectToRoute('homepage');
             }
         }
 
@@ -92,5 +102,44 @@ class ProductsController extends Controller
             'form'    => $form->createView(),
             ]
         );
+    }
+
+    /**
+     * @Route("product/edit/{id}", name="product_edit")
+     * @return Response
+     */
+    public function editProductAction(Product $product, Request $request)
+    {
+        $form = $this->createForm(ProductEditType::class, $product);
+        $form->handleRequest($request);
+        $product->setUpdatedOn(new \DateTime());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash("success", "Product {$product->getName()} updated successfully!");
+
+            return $this->redirectToRoute("product_details", ['id' => $product->getId()]);
+        }
+
+        return $this->render(":product:edit.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("product/delete/{id}", name="product_delete")
+     * @return Response
+     */
+    public function deleteProductAction(Product $product)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($product);
+        $em->flush();
+
+        $this->addFlash("success", "Product {$product->getName()} deleted successfully!");
+
+        return $this->redirectToRoute("homepage");
     }
 }

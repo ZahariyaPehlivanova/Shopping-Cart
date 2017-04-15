@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Check authentication !!!!!!!!!!</h1>
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.quantity) }}
+        {{ form_row(form.image_form) }}
+        {{ form_row(form.price) }}
+        <hr>
+
+        <button class="btn btn-warning" formnovalidate>Edit <span class="glyphicon glyphicon-edit"></span>
+        </button>
+
+        {{ form_end(form) }}
+{% endblock %}
