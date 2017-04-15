@@ -5,8 +5,8 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * User
@@ -75,10 +75,21 @@ class User implements UserInterface
      */
     private $address;
 
-//    /**
-//     * @ORM\Column(type="json_array")
-//     */
+    /**
+     * @var Role[]|ArrayCollection
+     *
+     * @Assert\Count(min="1")
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
+     * @ORM\JoinTable(name="users_roles")
+     */
     private $roles = [];
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+        $this->initialCash = 2000;
+    }
 
     /**
      * Get id
@@ -297,12 +308,14 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        $roles = $this->roles;
-        if(!in_array('ROLE_USER', $roles))
-        {
-            $roles[] = 'ROLE_USER';
-        }
-        return $roles;
+        return $this->roles->toArray();
+    }
+
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
@@ -322,5 +335,9 @@ class User implements UserInterface
         $this->password = null;
     }
 
+    public function addRole(Role $role)
+    {
+        $this->roles[] = $role;
+    }
 }
 

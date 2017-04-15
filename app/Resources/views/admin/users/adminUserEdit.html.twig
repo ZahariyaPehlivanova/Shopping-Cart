@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password.first, {
+        'label': 'Password'
+    }) }}
+    {{ form_row(form.password.second, {
+        'label': 'Repeat Password'
+    }) }}
+    {{ form_row(form.phone) }}
+    {{ form_row(form.address) }}
+    {{ form_row(form.roles) }}
+  <hr>
+
+  <button class="btn btn-warning" formnovalidate>Edit <span class="glyphicon glyphicon-edit"></span>
+  </button>
+
+    {{ form_end(form) }}
+{% endblock %}

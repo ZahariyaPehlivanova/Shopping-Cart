@@ -3,18 +3,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\UserLoginType;
-use AppBundle\Form\UserRegistrationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SecurityController extends Controller
 {
     /**
      * @Route("/login", name="security_login")
+     * @Security("is_anonymous()")
      */
     public function loginAction(){
         $authenticationUtils = $this->get('security.authentication_utils');
@@ -38,6 +35,7 @@ class SecurityController extends Controller
 
     /**
      * @Route("/logout", name="security_logout")
+     * @Security("is_authenticated()")
      */
     public function logoutAction(){
 

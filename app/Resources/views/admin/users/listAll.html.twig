@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Initial Cash</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Roles</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.initialCash }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.address }}</td>
+                <td>{{ user.roles|join(", ") }}</td>
+                <td>
+                    <a href="{{ path("admin_edit_user", {"id": user.id}) }}" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    <form action="{{ path("admin_delete_user", {"id": user.id}) }}" method="post">
+                        <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
