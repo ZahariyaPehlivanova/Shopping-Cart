@@ -88,6 +88,12 @@ class Product
      */
     private $buyers;
 
+    /**
+     * @var Category $category
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="products")
+     * @Assert\NotBlank()
+     */
+    private $category;
 
     /**
      * Get id
@@ -329,6 +335,22 @@ class Product
     public function setImageForm($image_form)
     {
         $this->image_form = $image_form;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 }
 

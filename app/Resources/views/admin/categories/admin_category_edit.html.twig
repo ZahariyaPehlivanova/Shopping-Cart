@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+  <hr>
+
+  <button class="btn btn-warning" formnovalidate>Edit <span class="glyphicon glyphicon-edit"></span>
+  </button>
+
+    {{ form_end(form) }}
+{% endblock %}

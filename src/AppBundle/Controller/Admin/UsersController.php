@@ -18,7 +18,7 @@ class UsersController extends Controller
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
-        return $this->render(":admin/users:listAll.html.twig", [
+        return $this->render(":admin/users:all_users.html.twig", [
             "users" => $users
         ]);
     }
@@ -43,7 +43,7 @@ class UsersController extends Controller
             return $this->redirectToRoute("get_all_users");
         }
 
-        return $this->render("admin/users/adminUserEdit.html.twig", [
+        return $this->render(":admin/users:admin_user_edit.html.twig", [
             "form" => $form->createView()
         ]);
     }
@@ -61,5 +61,4 @@ class UsersController extends Controller
 
         return $this->redirectToRoute("get_all_users");
     }
-
 }

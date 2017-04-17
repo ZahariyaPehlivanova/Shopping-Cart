@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Active</h1>
+    {% if activeCategories|length > 0 %}
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in activeCategories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                    <a href="{{ path("admin_edit_category", {"id": category.id}) }}" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    <form action="{{ path("admin_delete_category", {"id": category.id}) }}" method="post">
+                        <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <h3>No deleted categories!</h3>
+    {% endif %}
+
+    <h1>Deleted</h1>
+    {% if deletedCategories|length > 0 %}
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Edit</th>
+            <th>Restore</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in deletedCategories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                    <a href="{{ path("admin_edit_category", {"id": category.id}) }}" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    <form action="{{ path("admin_restore_category", {"id": category.id}) }}" method="post">
+                        <button class="btn btn-info" type="submit">Restore</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <h3>No deleted categories!</h3>
+    {% endif %}
+{% endblock %}

@@ -38,10 +38,20 @@
                         <th>Seller</th>
                         <td>{{ product.seller.username }}</td>
                     </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ product.category}}</td>
+                    </tr>
                 </table>
                 <hr>
+                {% if app.user %}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ADMIN') or product.seller.id == app.user.id %}
                 <a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>
-                <a href="{{ path("product_delete", {"id": product.id}) }}" class="btn btn-danger delete-item">Delete <span class="glyphicon glyphicon-edit"></span></a>
+                <form action="{{ path("product_delete", {"id": product.id}) }}" method="post">
+                    <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                </form>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>

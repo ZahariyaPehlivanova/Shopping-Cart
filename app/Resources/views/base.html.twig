@@ -11,6 +11,7 @@
 <div class="main-content">
     <header class="header">
         <ul class="navbar">
+            <li><a href="{{ path('allProducts') }}">All Products</a></li>
             {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li><a href="{{ path('admin_home') }}">Admin panel</a></li>
@@ -26,6 +27,11 @@
     </header>
     {% for msg in app.session.flashBag.get('success') %}
         <div class="alert alert-success">
+            {{ msg }}
+        </div>
+    {% endfor %}
+    {% for msg in app.session.flashBag.get('error') %}
+        <div class="alert alert-danger">
             {{ msg }}
         </div>
     {% endfor %}

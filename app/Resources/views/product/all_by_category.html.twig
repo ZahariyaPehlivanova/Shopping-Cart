@@ -1,0 +1,12 @@
+{% extends '@WebShop/base.html.twig' %}
+
+{% block main_title %}Products in <strong>{{ category }}</strong> category{% endblock %}
+
+{% block main %}
+    {% if products|length > 0 %}
+
+    {% else %}
+        <p>Sorry, no products yet. :(</p>
+    {% endif %}
+{% endblock %}
+

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Form\AddProductType;
 use AppBundle\Form\ProductEditType;
@@ -13,7 +14,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProductsController extends Controller
+class ProductController extends Controller
 {
     public function indexAction($name)
     {
@@ -21,7 +22,7 @@ class ProductsController extends Controller
     }
 
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="allProducts")
      */
     public function listAllProductsAction()
     {
@@ -72,7 +73,6 @@ class ProductsController extends Controller
             $product->setUpdatedOn(new \DateTime());
             $user = $this->getUser();
             $product->setSeller($user);
-
             $file = $product->getImageForm();
 
             if (!$file) {
@@ -93,7 +93,7 @@ class ProductsController extends Controller
 
                 $this->get('session')->getFlashBag()->add('success', 'Product is created successfully!');
 
-                return $this->redirectToRoute('homepage');
+                return $this->redirectToRoute('allProducts');
             }
         }
 
@@ -106,10 +106,15 @@ class ProductsController extends Controller
 
     /**
      * @Route("product/edit/{id}", name="product_edit")
+     * @Security(expression="is_granted('IS_AUTHENTICATED_FULLY')")
      * @return Response
      */
     public function editProductAction(Product $product, Request $request)
     {
+        if(!$this->isAuthenticated($product)){
+            $this->addFlash("error", "You are not allowed to edit this product!");
+            return $this->redirectToRoute("allProducts");
+        }
         $form = $this->createForm(ProductEditType::class, $product);
         $form->handleRequest($request);
         $product->setUpdatedOn(new \DateTime());
@@ -130,16 +135,50 @@ class ProductsController extends Controller
 
     /**
      * @Route("product/delete/{id}", name="product_delete")
+     * @Security(expression="is_granted('IS_AUTHENTICATED_FULLY')")
      * @return Response
      */
     public function deleteProductAction(Product $product)
     {
+       if(!$this->isAuthenticated($product)){
+           $this->addFlash("error", "You are not allowed to delete this product!");
+           return $this->redirectToRoute("allProducts");
+       }
         $em = $this->getDoctrine()->getManager();
         $em->remove($product);
         $em->flush();
 
         $this->addFlash("success", "Product {$product->getName()} deleted successfully!");
 
-        return $this->redirectToRoute("homepage");
+        return $this->redirectToRoute("allProducts");
+    }
+
+    /**
+     * @Route("/category/{id}", name="products_by_category")
+     * @Method("GET")
+     *
+     * @param Request $request
+     * @param Category $category
+     * @return Response
+     */
+    public function listCategoryAction(Request $request, Category $category)
+    {
+        $products =
+            $this->getDoctrine()->getRepository(Product::class)->findAllProductsByCategory($category);
+
+        return $this->render(":product:all_by_category.html.twig", [
+            "products" => $products,
+            "category" => $category
+        ]);
+    }
+
+
+    private function isAuthenticated(Product $product){
+        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
+        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
+        $isSeller = $product->getSeller()->getId() == $this->getUser()->getId();
+
+        return $isAdmin || $isEditor || $isSeller;
     }
 }
+
