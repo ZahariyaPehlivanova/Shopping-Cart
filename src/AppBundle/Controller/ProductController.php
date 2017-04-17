@@ -156,22 +156,18 @@ class ProductController extends Controller
     /**
      * @Route("/category/{id}", name="products_by_category")
      * @Method("GET")
-     *
-     * @param Request $request
      * @param Category $category
      * @return Response
      */
-    public function listCategoryAction(Request $request, Category $category)
+    public function productsByCategoryAction(Category $category)
     {
-        $products =
-            $this->getDoctrine()->getRepository(Product::class)->findAllProductsByCategory($category);
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAllProductsByCategory($category);
 
-        return $this->render(":product:all_by_category.html.twig", [
+        return $this->render("product/all_by_category.html.twig", [
             "products" => $products,
             "category" => $category
         ]);
     }
-
 
     private function isAuthenticated(Product $product){
         $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());

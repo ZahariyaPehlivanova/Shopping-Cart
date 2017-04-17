@@ -5,8 +5,6 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Category;
 use AppBundle\Form\Admin\EditCategoryType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Form\Admin\EditUserType;
-use AppBundle\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

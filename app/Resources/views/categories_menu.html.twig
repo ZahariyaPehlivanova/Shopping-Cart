@@ -1,11 +1,11 @@
 <h1 class="h4"></h1>
 <ul class="list-group">
-    <li class="list-group-item active">Product Categories</li>
+    <li>Categories</li>
     {% if categories|length > 0 %}
-        {% for cat in categories %}
-            <li class="list-group-item">
-                <span class="badge">{{ cat.products|length }}</span>
-                <a href="{{ path("products_by_category", {"id": cat.id}) }}">{{ cat.name }}</a>
+        {% for category in categories %}
+            <li>
+                <span class="badge">{{ category.products|length }}</span>
+                <a href="{{ path("products_by_category", {"id": category.id}) }}">{{ category.name }}</a>
             </li>
         {% endfor %}
     {% else %}
