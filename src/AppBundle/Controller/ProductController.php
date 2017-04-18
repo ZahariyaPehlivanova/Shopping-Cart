@@ -26,10 +26,26 @@ class ProductController extends Controller
      */
     public function listAllProductsAction()
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
 
         return $this->render(":product:all.html.twig", [
             "products" => $products
+        ]);
+    }
+
+    /**
+     * @Route("/category/{id}", name="products_by_category")
+     * @Method("GET")
+     * @param Category $category
+     * @return Response
+     */
+    public function productsByCategoryAction(Category $category)
+    {
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
+
+        return $this->render("product/all_by_category.html.twig", [
+            "products" => $products,
+            "category" => $category
         ]);
     }
 
@@ -153,27 +169,10 @@ class ProductController extends Controller
         return $this->redirectToRoute("allProducts");
     }
 
-    /**
-     * @Route("/category/{id}", name="products_by_category")
-     * @Method("GET")
-     * @param Category $category
-     * @return Response
-     */
-    public function productsByCategoryAction(Category $category)
-    {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAllProductsByCategory($category);
-
-        return $this->render("product/all_by_category.html.twig", [
-            "products" => $products,
-            "category" => $category
-        ]);
-    }
-
     private function isAuthenticated(Product $product){
         $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
         $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
         $isSeller = $product->getSeller()->getId() == $this->getUser()->getId();
-
         return $isAdmin || $isEditor || $isSeller;
     }
 }

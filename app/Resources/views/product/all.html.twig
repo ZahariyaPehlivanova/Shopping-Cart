@@ -1,44 +1,60 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+{% if products|length > 0 %}
 <div>
-<h1>All Products</h1>
-   <div class="container">
-       <div class="row">
-       <aside class="col-md-3">
-           {% block sideabr %}
-               {{ render(controller("AppBundle:Index:sidebarMenu")) }}
-           {% endblock %}
-       </aside>
+    <h1>All Products</h1>
+       <div class="container">
+           <div class="row">
+           <aside class="col-md-3">
+               {% block sideabr %}
+                   {{ render(controller("AppBundle:Index:sidebarMenu")) }}
+               {% endblock %}
+           </aside>
            <main class="col-md-9">
-       <table class="table table-responsive table-striped">
-           <thead>
-           <tr>
-               <th>#</th>
-               <th>Image</th>
-               <th>Name</th>
-               <th>Description</th>
-               <th>Quantity</th>
-               <th>Price</th>
-               <th>Seller</th>
-           </tr>
-           </thead>
-           <tbody>
-           {% for product in products %}
+           <table class="table table-responsive table-striped">
+               <thead>
                <tr>
-                   <td>{{ product.id }}</td>
-                   <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
-                   <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
-                   <td>{{ product.description }}</td>
-                   <td>{{ product.quantity }}</td>
-                   <td>{{ product.price }}</td>
-                   <td>{{ product.seller.username }}</td>
+                   <th>#</th>
+                   <th>Image</th>
+                   <th>Name</th>
+                   <th>Description</th>
+                   <th>Quantity</th>
+                   <th>Price</th>
+                   <th>Seller</th>
                </tr>
-           {% endfor %}
-           </tbody>
-       </table>
-       </main>
+               </thead>
+               <tbody>
+               {% for product in products %}
+                   <tr>
+                       <td>{{ product.id }}</td>
+                       <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
+                       <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
+                       <td>{{ product.description }}</td>
+                       <td>{{ product.quantity }}</td>
+                       <td>{{ product.price }}</td>
+                       <td>{{ product.seller.username }}</td>
+                       {% if app.user %}
+                           {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}
+                              <td>
+                               <a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>
+                              </td>
+                               <td>
+                                   <form action="{{ path("product_delete", {"id": product.id}) }}" method="post">
+                                   <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                               </form>
+                              </td>
+                           {% endif %}
+                       {% endif %}
+                   </tr>
+               {% endfor %}
+               </tbody>
+           </table>
+           </main>
+           </div>
        </div>
-   </div>
 </div>
+{% else %}
+    <p>No products to show</p>
+{% endif %}
 {% endblock %}

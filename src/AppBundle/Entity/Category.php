@@ -44,6 +44,12 @@ class Category
     private $products;
 
 
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+        $this->isDeleted = false;
+    }
+
     /**
      * Get id
      *

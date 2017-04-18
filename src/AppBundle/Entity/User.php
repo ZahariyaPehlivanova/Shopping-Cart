@@ -345,5 +345,9 @@ class User implements UserInterface
     {
         $this->roles[] = $role;
     }
+
+    public function buyProduct(Product $product){
+        $this->products[] = $product;
+    }
 }
 

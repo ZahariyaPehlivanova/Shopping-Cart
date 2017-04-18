@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class UsersController extends Controller
 {
     /**
@@ -16,6 +17,10 @@ class UsersController extends Controller
      */
     public function allUsersAction()
     {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to see the users!");
+            return $this->redirectToRoute("allProducts");
+        }
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
         return $this->render(":admin/users:all_users.html.twig", [
@@ -29,6 +34,10 @@ class UsersController extends Controller
      */
     public function editUserAction(User $user, Request $request)
     {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to edit this user!");
+            return $this->redirectToRoute("allProducts");
+        }
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
@@ -53,6 +62,10 @@ class UsersController extends Controller
      */
     public function deleteUserAction(User $user)
     {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to delete this user!");
+            return $this->redirectToRoute("allProducts");
+        }
         $em = $this->getDoctrine()->getManager();
         $em->remove($user);
         $em->flush();

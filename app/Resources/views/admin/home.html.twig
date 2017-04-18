@@ -5,8 +5,11 @@
         <div class="row">
             <div class="col-xs-12">
                 <h1>Admin Panel</h1>
+                {% if is_granted('ROLE_ADMIN')%}
                 <li><a href="{{ path('get_all_users') }}">All Users</a></li>
+                {% endif %}
                 <li><a href="{{ path('allProducts') }}">All Products</a></li>
+                <li><a href="{{ path('outOfStockProducts') }}">Out of stock products</a></li>
                 <li><a href="{{ path('get_all_categories') }}">All Categories</a></li>
             </div>
         </div>

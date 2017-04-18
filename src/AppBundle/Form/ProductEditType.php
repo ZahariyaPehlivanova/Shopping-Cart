@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
@@ -25,7 +25,13 @@ class ProductEditType extends AbstractType
                 'data_class' => null,
                 'required' => false
             ] )
-            ->add('price', MoneyType::class);
+            ->add('price', MoneyType::class)
+            ->add("category", EntityType::class, [
+                "class" => 'AppBundle\Entity\Category',
+                "placeholder" => 'Select',
+                "multiple" => false,
+
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

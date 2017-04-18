@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    <a href="{{ path("admin_add_category") }}" class="btn btn-info">Add new category</a>
+
     <h1>Active</h1>
     {% if activeCategories|length > 0 %}
     <table class="table table-responsive table-striped">

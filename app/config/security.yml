@@ -33,7 +33,8 @@ security:
             #form_login: ~
 
     access_control:
-        - {path: ^/admin, roles: ROLE_ADMIN}
+        - {path: ^/admin, roles: [ROLE_ADMIN, ROLE_EDITOR]}
         - {path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - {path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - {path: ^/images, role: IS_AUTHENTICATED_FULLY}
 
