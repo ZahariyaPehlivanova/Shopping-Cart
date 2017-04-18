@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if products|length > 0 %}
+        <div>
+            <h1>Products in cart</h1>
+            <div class="container">
+                <div class="row">
+                    <main class="col-md-9">
+                        <table class="table table-responsive table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Seller</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for product in products %}
+                                <tr>
+                                    <td>{{ product.id }}</td>
+                                    <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
+                                    <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
+                                    <td>{{ product.description }}</td>
+                                    <td>{{ product.quantity }}</td>
+                                    <td>{{ product.price }}</td>
+                                    <td>{{ product.seller.username }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </main>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>No products to show</p>
+    {% endif %}
+{% endblock %}

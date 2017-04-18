@@ -86,7 +86,10 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Product", mappedBy="seller")
+     * @var Product[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product", inversedBy="users")
+     * @ORM\JoinTable(name="cart")
      */
     private $products = [];
 
@@ -108,6 +111,16 @@ class User implements UserInterface
     }
 
     /**
+     * Get firstName
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
      * Set firstName
      *
      * @param string $firstName
@@ -122,13 +135,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get firstName
+     * Get lastName
      *
      * @return string
      */
-    public function getFirstName()
+    public function getLastName()
     {
-        return $this->firstName;
+        return $this->lastName;
     }
 
     /**
@@ -146,13 +159,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get lastName
+     * Get username
      *
      * @return string
      */
-    public function getLastName()
+    public function getUsername()
     {
-        return $this->lastName;
+        return $this->username;
     }
 
     /**
@@ -170,13 +183,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get username
+     * Get email
      *
      * @return string
      */
-    public function getUsername()
+    public function getEmail()
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
@@ -194,13 +207,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get email
+     * Get password
      *
      * @return string
      */
-    public function getEmail()
+    public function getPassword()
     {
-        return $this->email;
+        return $this->password;
     }
 
     /**
@@ -218,13 +231,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get password
+     * Get initialCash
      *
      * @return string
      */
-    public function getPassword()
+    public function getInitialCash()
     {
-        return $this->password;
+        return $this->initialCash;
     }
 
     /**
@@ -242,13 +255,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get initialCash
+     * Get phone
      *
      * @return string
      */
-    public function getInitialCash()
+    public function getPhone()
     {
-        return $this->initialCash;
+        return $this->phone;
     }
 
     /**
@@ -266,13 +279,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get phone
+     * Get address
      *
      * @return string
      */
-    public function getPhone()
+    public function getAddress()
     {
-        return $this->phone;
+        return $this->address;
     }
 
     /**
@@ -287,16 +300,6 @@ class User implements UserInterface
         $this->address = $address;
 
         return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
     }
 
     public function getSalt()
@@ -339,6 +342,22 @@ class User implements UserInterface
     {
         $this->plainPassword = $plainPassword;
         $this->password = null;
+    }
+
+    /**
+     * @return Product[]|ArrayCollection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
     }
 
     public function addRole(Role $role)

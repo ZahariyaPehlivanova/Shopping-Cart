@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -83,8 +84,9 @@ class Product
     private $updatedOn;
 
     /**
-     * @var array
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="products")
      *
+     * @var ArrayCollection
      */
     private $buyers;
 
