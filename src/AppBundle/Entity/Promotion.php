@@ -53,12 +53,24 @@ class Promotion
     private $duration;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_deleted", type="boolean")
+     */
+    private $isDeleted;
+
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product", mappedBy="promotions")
      *
      * @var ArrayCollection
      */
     private $products;
 
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+        $this->isDeleted = false;
+    }
 
     /**
      * Get id
@@ -156,6 +168,22 @@ class Promotion
     public function setProducts($products)
     {
         $this->products = $products;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsDeleted()
+    {
+        return $this->isDeleted;
+    }
+
+    /**
+     * @param mixed $isDeleted
+     */
+    public function setIsDeleted($isDeleted)
+    {
+        $this->isDeleted = $isDeleted;
     }
 
     public function __toString()

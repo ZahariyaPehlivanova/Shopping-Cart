@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <a href="{{ path("admin_add_promotion") }}" class="btn btn-info">Add new promotion</a>
+
+    <h1>Active</h1>
+    {% if activePromotions|length > 0 %}
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Discount</th>
+            <th>Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for promotion in activePromotions %}
+            <tr>
+                <td>{{ promotion.id }}</td>
+                <td>{{ promotion.name }}</td>
+                <td>{{ promotion.discount }}</td>
+                <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
+                        <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <h3>No active promotions!</h3>
+    {% endif %}
+
+    <h1>Deleted</h1>
+    {% if deletedPromotions|length > 0 %}
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Discount</th>
+            <th>Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for promotion in deletedPromotions %}
+            <tr>
+                <td>{{ promotion.id }}</td>
+                <td>{{ promotion.name }}</td>
+                <td>{{ promotion.discount }}</td>
+                <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    <form action="{{ path("admin_restore_promotion", {"id": promotion.id}) }}" method="post">
+                        <button class="btn btn-info" type="submit">Restore</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <h3>No deleted promotions!</h3>
+    {% endif %}
+{% endblock %}

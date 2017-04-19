@@ -370,7 +370,7 @@ class Product
     {
         $this->promotions = $promotions;
     }
-        
+
     /**
      * @param mixed $category
      */

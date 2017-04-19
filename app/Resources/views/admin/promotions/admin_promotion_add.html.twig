@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.discount) }}
+    {{ form_row(form.duration) }}
+  <hr>
+
+  <button class="btn btn-info" formnovalidate>Add<span class="glyphicon glyphicon-edit"></span>
+  </button>
+
+    {{ form_end(form) }}
+{% endblock %}

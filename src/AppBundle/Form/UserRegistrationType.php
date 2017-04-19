@@ -35,6 +35,6 @@ class UserRegistrationType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'app_bundle_user_type';
+        return 'app_bundle_user_registration_type';
     }
 }
