@@ -4,7 +4,7 @@
     {% if categories|length > 0 %}
         {% for category in categories %}
             <li>
-                <span class="badge">{{ category.products|length }}</span>
+                <span class="badge">{{ category.activeProducts|length }}</span>
                 <a href="{{ path("products_by_category", {"id": category.id}) }}">{{ category.name }}</a>
             </li>
         {% endfor %}

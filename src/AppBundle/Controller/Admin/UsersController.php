@@ -2,9 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Product;
+use AppBundle\Entity\User;
 use AppBundle\Form\Admin\EditUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,5 +74,45 @@ class UsersController extends Controller
         $this->addFlash("success", "User {$user->getEmail()} deleted successfully!");
 
         return $this->redirectToRoute("get_all_users");
+    }
+
+    /**
+     * @Route("admin/user/possessions/{id}", name="get_user_possessions")
+     */
+    public function userPossessionsAction(User $user)
+    {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to see the users!");
+            return $this->redirectToRoute("allProducts");
+        }
+
+        $products = $user->getProducts();
+
+        return $this->render(":admin/users:user_possessions.html.twig", [
+            "products" => $products,
+            "user" => $user
+        ]);
+    }
+
+    /**
+     * @Route("admin/user/removePossession/{id}/{user}", name="remove_user_possession")
+     */
+    public function removeUserPossessionAction(Product $product,User $user)
+    {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to see the users!");
+            return $this->redirectToRoute("allProducts");
+        }
+        $user->getProducts()->removeElement($product);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        $this->addFlash("success", "User possession removed successfully!");
+
+        return $this->render(":admin/users:user_possessions.html.twig", [
+            "products" => $user->getProducts()
+        ]);
     }
 }

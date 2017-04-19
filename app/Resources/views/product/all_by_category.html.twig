@@ -34,6 +34,9 @@
                        <td>{{ product.price }}</td>
                        <td>{{ product.seller.username }}</td>
                        {% if app.user %}
+                           <td>
+                           <a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>
+                           </td>
                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}
                                <td>
                                    <a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>

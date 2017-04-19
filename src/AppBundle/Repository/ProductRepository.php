@@ -10,6 +10,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->createQueryBuilder('product')
             ->andWhere('product.quantity > 0')
+            ->orderBy("product.price", "ASC")
             ->getQuery()
             ->execute();
     }
@@ -20,6 +21,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('product.category = :category')
             ->setParameter('category', $category)
             ->andWhere('product.quantity > 0')
+            ->orderBy("product.price", "ASC")
             ->getQuery()
             ->execute();
     }

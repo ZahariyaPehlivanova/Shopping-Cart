@@ -14,8 +14,6 @@
             <th>Phone</th>
             <th>Address</th>
             <th>Roles</th>
-            <th>Edit</th>
-            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +28,9 @@
                 <td>{{ user.phone }}</td>
                 <td>{{ user.address }}</td>
                 <td>{{ user.roles|join(", ") }}</td>
+                <td>
+                    <a href="{{ path("get_user_possessions", {"id": user.id}) }}" class="btn btn-info">Possessions</a>
+                </td>
                 <td>
                     <a href="{{ path("admin_edit_user", {"id": user.id}) }}" class="btn btn-warning">Edit</a>
                 </td>

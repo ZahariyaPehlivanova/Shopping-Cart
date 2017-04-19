@@ -29,7 +29,11 @@ class AddProductType extends AbstractType
                 "class" => 'AppBundle\Entity\Category',
                 "placeholder" => 'Select',
                 "multiple" => false,
-
+            ])
+            ->add("promotions", EntityType::class, [
+                "class" => 'AppBundle\Entity\Promotion',
+                "multiple" => true,
+                "expanded" => true
             ]);
     }
 

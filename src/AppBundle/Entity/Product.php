@@ -98,6 +98,14 @@ class Product
     private $category;
 
     /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Promotion", inversedBy="products")
+     * @ORM\JoinTable(name="product_promotions")
+     *
+     * @var ArrayCollection
+     */
+    private $promotions;
+
+    /**
      * Get id
      *
      * @return int
@@ -347,6 +355,22 @@ class Product
         return $this->category;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getPromotions()
+    {
+        return $this->promotions;
+    }
+
+    /**
+     * @param ArrayCollection $promotions
+     */
+    public function setPromotions($promotions)
+    {
+        $this->promotions = $promotions;
+    }
+        
     /**
      * @param mixed $category
      */

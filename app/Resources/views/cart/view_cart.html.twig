@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
+    <div class="row">
+        <h2>Total bill: {{ bill }} and you have {{ user.initialCash }}.</h2>
+    </div>
+    </div>
     {% if products|length > 0 %}
         <div>
             <h1>Products in cart</h1>
@@ -14,7 +19,6 @@
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Seller</th>
                             </tr>
@@ -26,13 +30,23 @@
                                     <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
                                     <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
                                     <td>{{ product.description }}</td>
-                                    <td>{{ product.quantity }}</td>
                                     <td>{{ product.price }}</td>
                                     <td>{{ product.seller.username }}</td>
+                                    {% if app.user %}
+                                       <td>
+                                            <form action="{{ path("cart_remove_product", {"id": product.id}) }}" method="post">
+                                                <button class="btn btn-danger delete-item" type="submit">Remove from cart</button>
+                                            </form>
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
+                        <div class="text-right">
+                            <a href="{{ path("cart_checkout") }}" class="btn btn-success btn-lg">Checkout <span
+                                        class="glyphicon glyphicon-shopping-cart"></span></a>
+                        </div>
                     </main>
                 </div>
             </div>

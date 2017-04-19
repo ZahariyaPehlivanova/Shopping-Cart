@@ -43,6 +43,7 @@ class Category
      */
     private $products;
 
+    private $activeProducts;
 
     public function __construct()
     {
@@ -103,6 +104,22 @@ class Category
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActiveProducts()
+    {
+        return $this->activeProducts;
+    }
+
+    /**
+     * @param mixed $activeProducts
+     */
+    public function setActiveProducts($activeProducts)
+    {
+        $this->activeProducts = $activeProducts;
     }
 
     public function __toString()
