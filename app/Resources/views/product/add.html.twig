@@ -3,19 +3,19 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
+            <main class="col-md-12">
                 <h1>Add</h1>
                 {{ form_start(form) }}
-                {{ form_row(form.name) }}
-                {{ form_row(form.description) }}
-                {{ form_row(form.quantity) }}
-                {{ form_row(form.price) }}
-                {{ form_row(form.category) }}
-                {{ form_row(form.promotions) }}
-                {{ form_row(form.image_form) }}
+                <p>{{ form_row(form.name) }}</p>
+                <p>{{ form_row(form.description,{ 'label': 'Description' }) }}</p>
+                <p>{{ form_row(form.quantity) }} </p>
+                <p>{{ form_row(form.price) }} </p>
+                <p>{{ form_row(form.category) }}</p>
+                <p>{{ form_row(form.promotions) }}</p>
+                <p>{{ form_row(form.image_form,{ 'label': 'Click here to add a picture!' }) }}</p>
                 <button type="submit" class="btn btn-primary" formnovalidate>Add</button>
                 {{ form_end(form) }}
-            </div>
+            </main>
         </div>
     </div>
 {% endblock %}

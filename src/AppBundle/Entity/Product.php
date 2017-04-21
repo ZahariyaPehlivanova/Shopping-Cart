@@ -379,6 +379,11 @@ class Product
         $this->promotions = $promotions;
     }
 
+    public function addPromotion(Promotion $promotion)
+    {
+        $this->promotions[] = $promotion;
+    }
+
     public function __toString()
     {
         return $this->getName();

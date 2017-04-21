@@ -31,6 +31,11 @@ class ProductEditType extends AbstractType
                 "placeholder" => 'Select',
                 "multiple" => false,
 
+            ])
+            ->add("promotions", EntityType::class, [
+                "class" => 'AppBundle\Entity\Promotion',
+                "multiple" => true,
+                "expanded" => true
             ]);
     }
 

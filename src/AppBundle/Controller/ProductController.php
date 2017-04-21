@@ -25,11 +25,17 @@ class ProductController extends Controller
     /**
      * @Route("/", name="allProducts")
      */
-    public function listAllProductsAction()
+    public function listAllProductsAction(Request $request)
     {
+        $pager = $this->get('knp_paginator');
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
         $products = $this->checkPromotions($products);
 
+        $products = $pager->paginate(
+            $products,
+            $request->query->getInt('page', 1),
+            6
+        );
         return $this->render(":product:all.html.twig", [
             "products" => $products
         ]);
@@ -136,15 +142,31 @@ class ProductController extends Controller
         }
         $form = $this->createForm(ProductEditType::class, $product);
         $form->handleRequest($request);
-        $product->setUpdatedOn(new \DateTime());
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
+            $product->setUpdatedOn(new \DateTime());
+            $file = $product->getImageForm();
 
-            $this->addFlash("success", "Product {$product->getName()} updated successfully!");
+            if (!$file) {
+                $form->get('image_form')->addError(new FormError('Image is required'));
+            } else {
+                $filename = md5($product->getName() . '' . $product->getCreatedOn()->format('Y-m-d H:i:s'));
 
-            return $this->redirectToRoute("product_details", ['id' => $product->getId()]);
+                $file->move(
+                    $this->get('kernel')->getRootDir() . '/../web/images/product/',
+                    $filename
+                );
+
+                $product->setImage($filename);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($product);
+                $em->flush();
+
+                $this->addFlash("success", "Product {$product->getName()} updated successfully!");
+
+                return $this->redirectToRoute("product_details", ['id' => $product->getId()]);
+            }
         }
 
         return $this->render(":product:edit.html.twig", [

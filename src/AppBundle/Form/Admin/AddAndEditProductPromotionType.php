@@ -3,7 +3,6 @@
 namespace AppBundle\Form\Admin;
 
 use AppBundle\Entity\Promotion;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -12,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class AddAndEditPromotionType extends AbstractType
+class AddAndEditProductPromotionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

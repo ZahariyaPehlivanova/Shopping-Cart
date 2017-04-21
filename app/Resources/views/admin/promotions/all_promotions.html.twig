@@ -2,11 +2,11 @@
 
 {% block body %}
 
-    <a href="{{ path("admin_add_promotion") }}" class="btn btn-info">Add new promotion for certain products</a>
+    <a href="{{ path("admin_add_product_promotion") }}" class="btn btn-info">Add new promotion for certain products</a>
     <a href="{{ path("admin_add_category_promotion") }}" class="btn btn-info">Add new promotion for certain categories</a>
-    <a href="{{ path("admin_add_promotion") }}" class="btn btn-info">Add new promotion for all products</a>
+    <a href="{{ path("admin_add_allProducts_promotion") }}" class="btn btn-info">Add new promotion for all products</a>
 
-    <h1>Promotions for categories</h1>
+    <h1>Promotions for certain categories</h1>
     {% if activePromotions|length > 0 %}
         <table class="table table-responsive table-striped">
             <thead>
@@ -41,43 +41,81 @@
             </tbody>
         </table>
     {% else %}
-        <h3>No active promotions!</h3>
+        <h3>No certain categories promotions!</h3>
     {% endif %}
 
-    <h1>Active</h1>
+    <h1>Promotions for certain products</h1>
     {% if activePromotions|length > 0 %}
-    <table class="table table-responsive table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Discount</th>
-            <th>Duration</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for promotion in activePromotions %}
-            {% if promotion.categories|length <= 0 %}
+        <table class="table table-responsive table-striped">
+            <thead>
             <tr>
-                <td>{{ promotion.id }}</td>
-                <td>{{ promotion.name }}</td>
-                <td>{{ promotion.discount }}</td>
-                <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
-                </td>
-                <td>
-                    <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
-                        <button class="btn btn-danger delete-item" type="submit">Delete</button>
-                    </form>
-                </td>
+                <th>#</th>
+                <th>Name</th>
+                <th>Discount</th>
+                <th>Duration</th>
+                <th>Products</th>
             </tr>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for promotion in activePromotions %}
+                {% if promotion.products|length > 0 %}
+                    <tr>
+                        <td>{{ promotion.id }}</td>
+                        <td>{{ promotion.name }}</td>
+                        <td>{{ promotion.discount }}</td>
+                        <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>{{ promotion.products|join(", ") }}</td>
+                        <td>
+                            <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                        </td>
+                        <td>
+                            <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
+                                <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <h3>No active promotions!</h3>
+        <h3>No certain products promotions!</h3>
+    {% endif %}
+
+    <h1>Promotions for all products</h1>
+    {% if activePromotions|length > 0 %}
+        <table class="table table-responsive table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Discount</th>
+                <th>Duration</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for promotion in activePromotions %}
+                {% if promotion.products|length == 0  and promotion.categories|length == 0 %}
+                    <tr>
+                        <td>{{ promotion.id }}</td>
+                        <td>{{ promotion.name }}</td>
+                        <td>{{ promotion.discount }}</td>
+                        <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>
+                            <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                        </td>
+                        <td>
+                            <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
+                                <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3>No all products promotions!</h3>
     {% endif %}
 
     <h1>Deleted</h1>

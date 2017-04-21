@@ -14,7 +14,7 @@
        <main class="col-md-9">
            {% for product in products %}
                <div class="col-sm-6 col-md-4">
-                   <div class="thumbnail">
+                   <div class="thumbnail" style="width: 450px;height: 450px">
                        <p><img src="/images/product/{{ product.image}}" style="width: 230px; text-align: center"/></p>
                        <p><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></p>
                        <p>Items left: {{ product.quantity }}</p>
@@ -37,6 +37,9 @@
        </div>
    </div>
 </div>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(products) }}
+    </div>
 {% else %}
     <p>No products to show</p>
 {% endif %}
