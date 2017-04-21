@@ -1,15 +1,15 @@
-<h1 class="h4"></h1>
-<ul class="list-group">
-    <li>Categories</li>
+<ul class="list-group" style="width: 200px">
+    <li class="list-group-item"><h4>Categories</h4></li>
     {% if categories|length > 0 %}
         {% for category in categories %}
-            <li>
+         <a href="{{ path("products_by_category", {"id": category.id}) }}">
+            <li class="list-group-item" id="category">
                 <span class="badge">{{ category.activeProducts|length }}</span>
-                <a href="{{ path("products_by_category", {"id": category.id}) }}">{{ category.name }}</a>
+                {{ category.name }}
             </li>
+         </a>
         {% endfor %}
     {% else %}
         <li class="text-muted">No categories</li>
     {% endif %}
 </ul>
-

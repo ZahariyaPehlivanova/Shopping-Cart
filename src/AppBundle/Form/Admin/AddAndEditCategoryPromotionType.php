@@ -5,24 +5,28 @@ namespace AppBundle\Form\Admin;
 use AppBundle\Entity\Promotion;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
-class AddAndEditPromotionType extends AbstractType
+class AddAndEditCategoryPromotionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', TextType::class)
             ->add('discount', NumberType::class)
             ->add('duration', DateType::class)
-            ->add("products", EntityType::class, [
-                "class" => 'AppBundle\Entity\Product',
+            ->add("categories", EntityType::class, [
+                "class" => 'AppBundle\Entity\Category',
                 "multiple" => true,
-                "expanded" => true
+                "expanded" => true,
+                "query_builder" => function(EntityRepository $er) {
+                    return $er->createQueryBuilder("category")
+                        ->where("category.isDeleted = false");
+                }
             ]);
     }
 
@@ -33,6 +37,6 @@ class AddAndEditPromotionType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'app_bundle_add_promotion_type';
+        return 'app_bundle_add_and_edit_category_promotion_type';
     }
 }

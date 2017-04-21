@@ -45,6 +45,14 @@ class Category
 
     private $activeProducts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Promotion", inversedBy="categories")
+     * @ORM\JoinTable(name="category_promotions")
+     *
+     * @var ArrayCollection
+     */
+    private $promotions;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -120,6 +128,14 @@ class Category
     public function setActiveProducts($activeProducts)
     {
         $this->activeProducts = $activeProducts;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPromotions()
+    {
+        return $this->promotions;
     }
 
     public function __toString()

@@ -9,23 +9,32 @@
 </head>
 <body>
 <div class="main-content">
-    <header class="header">
-        <ul class="navbar">
-            <li><a href="{{ path('allProducts') }}">All Products</a></li>
-            {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
-                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR')%}
-                    <li><a href="{{ path('admin_home') }}">Admin panel</a></li>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Zahariya'sWebShop</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path('allProducts') }}">All Products</a></li>
+                {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                    <li><a href="{{ path('add_product') }}">Add Product</a></li>
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR')%}
+                        <li><a href="{{ path('admin_home') }}">Admin panel</a></li>
+                    {% endif %}
                 {% endif %}
-                <li><a href="{{ path('add_product') }}">Add Product</a></li>
-                <li><a href="{{ path('user_cart') }}">My Cart</a></li>
-                <li><a href="{{ path('user_profile') }}">My Profile</a></li>
-                <li><a href="{{ path('security_logout') }}">Logout</a></li>
-            {% else %}
-                <li><a href="{{ path('security_login') }}">Login</a></li>
-                <li><a href="{{ path('user_register_form') }}">Register</a></li>
-            {% endif %}
-        </ul>
-    </header>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                    <li><a href="{{ path('user_cart') }}">My Cart</a></li>
+                    <li><a href="{{ path('user_profile') }}">My Profile</a></li>
+                    <li><a href="{{ path('security_logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ path('security_login') }}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+                    <li><a href="{{ path('user_register_form') }}"><span class="glyphicon glyphicon-user"></span>Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
     {% for msg in app.session.flashBag.get('success') %}
         <div class="alert alert-success">
             {{ msg }}
@@ -36,8 +45,8 @@
             {{ msg }}
         </div>
     {% endfor %}
-
-    {% block body %}{% endblock %}
+    {% block body %}
+    {% endblock %}
 </div>
 
 {% block javascripts %}

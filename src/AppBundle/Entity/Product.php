@@ -356,6 +356,14 @@ class Product
     }
 
     /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getPromotions()
@@ -371,12 +379,9 @@ class Product
         $this->promotions = $promotions;
     }
 
-    /**
-     * @param mixed $category
-     */
-    public function setCategory($category)
+    public function __toString()
     {
-        $this->category = $category;
+        return $this->getName();
     }
 }
 

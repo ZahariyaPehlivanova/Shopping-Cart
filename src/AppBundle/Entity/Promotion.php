@@ -66,15 +66,21 @@ class Promotion
      */
     private $products;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Category", mappedBy="promotions")
+     *
+     * @var ArrayCollection
+     */
+    private $categories;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->isDeleted = false;
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -83,22 +89,14 @@ class Promotion
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Promotion
+     * @param int $id
      */
-    public function setName($name)
+    public function setId($id)
     {
-        $this->name = $name;
-
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get name
-     *
      * @return string
      */
     public function getName()
@@ -107,22 +105,14 @@ class Promotion
     }
 
     /**
-     * Set discount
-     *
-     * @param integer $discount
-     *
-     * @return Promotion
+     * @param string $name
      */
-    public function setDiscount($discount)
+    public function setName($name)
     {
-        $this->discount = $discount;
-
-        return $this;
+        $this->name = $name;
     }
 
     /**
-     * Get discount
-     *
      * @return int
      */
     public function getDiscount()
@@ -131,22 +121,14 @@ class Promotion
     }
 
     /**
-     * Set duration
-     *
-     * @param \DateTime $duration
-     *
-     * @return Promotion
+     * @param int $discount
      */
-    public function setDuration($duration)
+    public function setDiscount($discount)
     {
-        $this->duration = $duration;
-
-        return $this;
+        $this->discount = $discount;
     }
 
     /**
-     * Get duration
-     *
      * @return \DateTime
      */
     public function getDuration()
@@ -155,23 +137,15 @@ class Promotion
     }
 
     /**
-     * @return mixed
+     * @param \DateTime $duration
      */
-    public function getProducts()
+    public function setDuration($duration)
     {
-        return $this->products;
+        $this->duration = $duration;
     }
 
     /**
-     * @param mixed $products
-     */
-    public function setProducts($products)
-    {
-        $this->products = $products;
-    }
-
-    /**
-     * @return mixed
+     * @return bool
      */
     public function getIsDeleted()
     {
@@ -179,12 +153,45 @@ class Promotion
     }
 
     /**
-     * @param mixed $isDeleted
+     * @param bool $isDeleted
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param ArrayCollection $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param ArrayCollection $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
+    }
+
 
     public function __toString()
     {

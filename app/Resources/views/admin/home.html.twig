@@ -2,17 +2,17 @@
 
 {% block body %}
     <div class="container">
-        <div class="row">
             <div class="col-xs-12">
-                <h1>Admin Panel</h1>
+            <h1>Admin Panel</h1>
+            <ul class="list-group">
                 {% if is_granted('ROLE_ADMIN')%}
-                <li><a href="{{ path('get_all_users') }}">All Users</a></li>
+                     <li class="list-group-item"><a href="{{ path('get_all_users') }}">All Users</a></li>
                 {% endif %}
-                <li><a href="{{ path('allProducts') }}">All Products</a></li>
-                <li><a href="{{ path('outOfStockProducts') }}">Out of stock products</a></li>
-                <li><a href="{{ path('get_all_categories') }}">All Categories</a></li>
-                <li><a href="{{ path('get_all_promotions') }}">All Promotions</a></li>
-            </div>
+                <li class="list-group-item" id="adminNav"><a href="{{ path('allProducts') }}">All Products</a></li>
+                <li class="list-group-item" id="adminNav"><a href="{{ path('outOfStockProducts') }}">Out of stock products</a></li>
+                <li class="list-group-item" id="adminNav"><a href="{{ path('get_all_categories') }}">All Categories</a></li>
+                <li class="list-group-item" id="adminNav"><a href="{{ path('get_all_promotions') }}">All Promotions</a></li>
+            </ul>
         </div>
     </div>
 {% endblock %}

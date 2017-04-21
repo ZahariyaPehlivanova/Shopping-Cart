@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class ProductController extends Controller
 {
@@ -27,6 +28,7 @@ class ProductController extends Controller
     public function listAllProductsAction()
     {
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
+        $products = $this->checkPromotions($products);
 
         return $this->render(":product:all.html.twig", [
             "products" => $products
@@ -42,6 +44,7 @@ class ProductController extends Controller
     public function productsByCategoryAction(Category $category)
     {
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
+        $products = $this->checkPromotions($products);
 
         return $this->render("product/all_by_category.html.twig", [
             "products" => $products,
@@ -174,6 +177,32 @@ class ProductController extends Controller
         $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
         $isSeller = $product->getSeller()->getId() == $this->getUser()->getId();
         return $isAdmin || $isEditor || $isSeller;
+    }
+
+    private function checkPromotions($products){
+        $em = $this->getDoctrine()->getManager();
+        foreach ($products as $product){
+            $promotions = $product->getPromotions();
+            if(count($promotions) > 0){
+                foreach ($promotions as $promotion) {
+                    if ($promotion->getIsDeleted() == false) {
+                        $now = new DateTime();
+                        if($promotion->getDuration() < $now){
+                            $oldPrice = $product->getPrice();
+                            $discountInPercentage = $promotion->getDiscount() / 100;
+                            $newPrice = $oldPrice + ($oldPrice * $discountInPercentage);
+                            $product->setPrice($newPrice);
+                            $promotion->setIsDeleted(true);
+
+                            $em->persist($promotion);
+                            $em->persist($product);
+                            $em->flush();
+                        }
+                    }
+                }
+            }
+        }
+        return $products;
     }
 }
 

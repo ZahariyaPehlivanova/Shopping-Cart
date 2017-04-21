@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Product;
 use AppBundle\Entity\Promotion;
+use AppBundle\Form\Admin\AddAndEditCategoryPromotionType;
 use AppBundle\Form\Admin\AddAndEditPromotionType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Entity\Category;
-use AppBundle\Form\Admin\AddAndEditCategoryType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +18,9 @@ class PromotionsController extends Controller
      */
     public function allPromotionsAction()
     {
-        $activePromotions = $this->getDoctrine()->getRepository(Promotion::class)->findAllActivePromotions();
-        $deletedPromotions = $this->getDoctrine()->getRepository(Promotion::class)->findAllDeletedPromotions();
+        $repository =  $this->getDoctrine()->getRepository(Promotion::class);
+        $activePromotions = $repository->findAllActivePromotions();
+        $deletedPromotions = $repository->findAllDeletedPromotions();
 
         return $this->render(":admin/promotions:all_promotions.html.twig", [
             "activePromotions" => $activePromotions,
@@ -48,6 +49,47 @@ class PromotionsController extends Controller
         }
 
         return $this->render(':admin/promotions:admin_promotion_add.html.twig', [
+                'promotion' => $promotion,
+                'form'    => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("admin/add/categoryPromotion", name="admin_add_category_promotion")
+     * @return Response
+     */
+    public function addCategoryPromotionAction(Request $request)
+    {
+        $promotion = new Promotion();
+        $form = $this->createForm(AddAndEditCategoryPromotionType::class, $promotion);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $categories = $promotion->getCategories();
+            $promotion->setCategories($categories);
+            foreach ($categories as $category)
+            {
+                $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
+                foreach ($products as $product){
+                    $oldPrice = $product->getPrice();
+                    $discountInPercentage = $promotion->getDiscount() / 100;
+                    $newPrice = $oldPrice - ($oldPrice * $discountInPercentage);
+                    $product->setPrice($newPrice);
+                    $em->persist($product);
+                }
+            }
+            $em->persist($promotion);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Promotion was created successfully!');
+
+            return $this->redirectToRoute('get_all_promotions');
+        }
+
+        return $this->render(':admin/promotions:admin_category_promotion_add.html.twig', [
                 'promotion' => $promotion,
                 'form'    => $form->createView(),
             ]
