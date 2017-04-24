@@ -9,7 +9,10 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function findAllActiveProducts()
     {
         return $this->createQueryBuilder('product')
+            ->join('product.category', 'category')
             ->andWhere('product.quantity > 0')
+            ->andWhere('category.isDeleted = :isDeleted')
+            ->setParameter('isDeleted', false)
             ->orderBy("product.price", "ASC")
             ->getQuery()
             ->execute();

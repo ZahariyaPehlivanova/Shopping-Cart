@@ -36,25 +36,19 @@ class CartController extends Controller
             return $this->redirectToRoute("user_cart");
         }
 
-        if($user->getInitialCash() >= $product->getPrice()) {
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-            $currQuantity = $product->getQuantity();
-            $product->setQuantity($currQuantity -= 1);
+        $currQuantity = $product->getQuantity();
+        $product->setQuantity($currQuantity -= 1);
 
-            $user->getProducts()->add($product);
+        $user->getProducts()->add($product);
 
-            $em->persist($user);
-            $em->persist($product);
-            $em->flush();
+        $em->persist($user);
+        $em->persist($product);
+        $em->flush();
 
-            $this->addFlash("success", "Product added to your cart.");
-            return $this->redirectToRoute("user_cart");
-        }
-        else{
-            $this->addFlash("error", "You don't have enough cash to buy this product.");
-            return $this->redirectToRoute("product_details", ['id'=>$product->getId()]);
-        }
+        $this->addFlash("success", "Product added to your cart.");
+        return $this->redirectToRoute("user_cart");
     }
 
     /**
@@ -67,11 +61,6 @@ class CartController extends Controller
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $user->getProducts()->removeElement($product);
-
-        $price = doubleval($product->getPrice());
-        $cash = doubleval($user->getInitialCash());
-
-        $user->setInitialCash($price + $cash);
 
         $quantity = $product->getQuantity();
         $product->setQuantity($quantity += 1);
@@ -118,7 +107,7 @@ class CartController extends Controller
     private function getTotalBill($products){
         $sum = 0;
         foreach ($products as $product){
-            $sum += $product->getPrice();
+            $sum += $product->getPromotionPrice();
         }
         return $sum;
     }

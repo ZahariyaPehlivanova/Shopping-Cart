@@ -98,6 +98,7 @@ class ProductController extends Controller
             $product->setUpdatedOn(new \DateTime());
             $user = $this->getUser();
             $product->setSeller($user);
+            $product->setPromotionPrice($product->getPrice());
             $file = $product->getImageForm();
 
             if (!$file) {

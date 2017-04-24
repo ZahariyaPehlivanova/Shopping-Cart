@@ -70,6 +70,13 @@ class Product
     private $price;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="promotionPrice", type="decimal", precision=11, scale=2)
+     */
+    private $promotionPrice;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdOn", type="datetimetz")
@@ -382,6 +389,22 @@ class Product
     public function addPromotion(Promotion $promotion)
     {
         $this->promotions[] = $promotion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPromotionPrice()
+    {
+        return $this->promotionPrice;
+    }
+
+    /**
+     * @param string $promotionPrice
+     */
+    public function setPromotionPrice($promotionPrice)
+    {
+        $this->promotionPrice = $promotionPrice;
     }
 
     public function __toString()

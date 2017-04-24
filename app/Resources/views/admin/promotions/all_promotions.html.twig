@@ -27,11 +27,11 @@
                         <td>{{ promotion.discount }}</td>
                         <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>{{ promotion.categories|join(", ") }}</td>
+                        {#<td>#}
+                            {#<a href="{{ path("admin_edit_category_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>#}
+                        {#</td>#}
                         <td>
-                            <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
-                        </td>
-                        <td>
-                            <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
+                            <form action="{{ path("admin_delete_category_promotion", {"id": promotion.id}) }}" method="post">
                                 <button class="btn btn-danger delete-item" type="submit">Delete</button>
                             </form>
                         </td>
@@ -58,7 +58,7 @@
             </thead>
             <tbody>
             {% for promotion in activePromotions %}
-                {% if promotion.products|length > 0 %}
+                {% if promotion.products|length > 0 and promotion.products|length != allProducts|length %}
                     <tr>
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
@@ -66,10 +66,10 @@
                         <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>{{ promotion.products|join(", ") }}</td>
                         <td>
-                            <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ path("admin_edit_product_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
                         </td>
                         <td>
-                            <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
+                            <form action="{{ path("admin_delete_product_promotion", {"id": promotion.id}) }}" method="post">
                                 <button class="btn btn-danger delete-item" type="submit">Delete</button>
                             </form>
                         </td>
@@ -95,17 +95,17 @@
             </thead>
             <tbody>
             {% for promotion in activePromotions %}
-                {% if promotion.products|length == 0  and promotion.categories|length == 0 %}
+                {% if promotion.categories|length == 0 and promotion.products|length == allProducts|length%}
                     <tr>
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
                         <td>{{ promotion.discount }}</td>
                         <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>
-                            <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ path("admin_edit_allProducts_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
                         </td>
                         <td>
-                            <form action="{{ path("admin_delete_promotion", {"id": promotion.id}) }}" method="post">
+                            <form action="{{ path("admin_delete_allProducts_promotion", {"id": promotion.id}) }}" method="post">
                                 <button class="btn btn-danger delete-item" type="submit">Delete</button>
                             </form>
                         </td>
@@ -136,9 +136,9 @@
                 <td>{{ promotion.name }}</td>
                 <td>{{ promotion.discount }}</td>
                 <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
-                </td>
+                {#<td>#}
+                    {#<a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>#}
+                {#</td>#}
                 <td>
                     <form action="{{ path("admin_restore_promotion", {"id": promotion.id}) }}" method="post">
                         <button class="btn btn-info" type="submit">Restore</button>

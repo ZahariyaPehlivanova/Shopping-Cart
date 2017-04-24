@@ -7,10 +7,11 @@
     {{ form_row(form.name) }}
     {{ form_row(form.discount) }}
     {{ form_row(form.duration) }}
-    <hr>
+    {{ form_row(form.categories) }}
+  <hr>
 
     <button class="btn btn-warning" formnovalidate>Edit <span class="glyphicon glyphicon-edit"></span>
-    </button>
+  </button>
 
     {{ form_end(form) }}
 {% endblock %}

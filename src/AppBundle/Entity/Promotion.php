@@ -192,7 +192,6 @@ class Promotion
         $this->categories = $categories;
     }
 
-
     public function __toString()
     {
         return $this->getName();
