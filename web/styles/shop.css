@@ -1,8 +1,33 @@
-#adminNav{
-    border: none;
+#emptyAnnotation{
+    color: #a94442;
+    font-size: 30px;
+    text-align: center;
 }
 
-#category:hover, #category:active{
+#adminMenu{
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    width:30em;
+    height:18em;
+    margin-top: -12em; /*set to a negative number 1/2 of your height*/
+    margin-left: -12em; /*set to a negative number 1/2 of your width*/;
+}
+
+#adminNav{
+    border: none;
+    background-color: #a94442;
+    color: whitesmoke;
+    border-radius: 10px;
+    width: 250px;
+    margin:5px;
+}
+
+#adminNav a{
+    color: whitesmoke;
+}
+
+#category:hover{
     background-color: #333;
     color: whitesmoke;
 }
@@ -11,36 +36,46 @@ a:hover, a:active{
     text-decoration:none;
 }
 
+#profileLabel{
+    color: #a94442;
+    font-weight: bold;
+    border-bottom: solid darkgray;
+    border-bottom-width: 1px;
+}
+
+#productDetails{
+    display: flex;
+    justify-content: space-between;
+}
+
 input, textarea{
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
     border-radius: 10px;
-    border: 2px solid #333;
+    border: 2px solid #a94442;
 }
+
 textarea {
      width: 100%;
      height: 100px;
      padding: 12px 20px;
      box-sizing: border-box;
-     border: 2px solid  #333;
+     border: 2px solid  #a94442;
      border-radius: 10px;
      resize: none;
 }
 
-select {
+select , #app_bundle_add_product_type_promotions, #app_bundle_product_edit_type_promotions{
     width: 100%;
     padding: 16px 20px;
-    border: 2px solid  #333;
+    border: 2px solid  #a94442;
     border-radius: 10px;
 }
 
-input[type="file"] {
-    display: none;
-}
 .custom-file-upload {
-    border: 1px solid #ccc;
+    border: 1px solid #a94442;
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
@@ -55,4 +90,54 @@ input[type="checkbox"]{
 .navigation .pagination li{
     background-color: #333;
     color: whitesmoke;
+}
+
+#categoryTitle{
+    background-color: #a94442;
+    color: whitesmoke;
+    text-align: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover{
+    background-color: #a94442;
+    color: whitesmoke;
+    text-align: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-radius: 50px;
+}
+
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #a94442;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #a94442;
+    border-color: #333;
+    border-radius: 50px;
+}
+
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+    z-index: 2;
+    color: #333;
+    background-color: #eee;
+    border-color: #ddd;
+    border-radius: 50px;
 }

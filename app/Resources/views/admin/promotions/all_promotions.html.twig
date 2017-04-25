@@ -40,7 +40,7 @@
             </tbody>
         </table>
     {% else %}
-        <h3>No certain categories promotions!</h3>
+        <p id="emptyAnnotation">No certain categories promotions</p>
     {% endif %}
 
     <h1>Promotions for certain products</h1>
@@ -57,7 +57,7 @@
             </thead>
             <tbody>
             {% for promotion in activePromotions %}
-                {% if promotion.products|length > 0 and promotion.products|length != allProducts|length %}
+                {% if promotion.products|length > 0 and promotion.products|length != allProducts|length and promotion.categories|length == 0 %}
                     <tr>
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
@@ -77,7 +77,7 @@
             </tbody>
         </table>
     {% else %}
-        <h3>No certain products promotions!</h3>
+        <p id="emptyAnnotation">No certain products promotions</p>
     {% endif %}
 
     <h1>Promotions for all products</h1>
@@ -112,7 +112,7 @@
             </tbody>
         </table>
     {% else %}
-        <h3>No all products promotions!</h3>
+        <p id="emptyAnnotation">No all products promotions</p>
     {% endif %}
 
     <h1>Deleted</h1>
@@ -123,7 +123,6 @@
             <th>#</th>
             <th>Name</th>
             <th>Discount</th>
-            <th>Duration</th>
         </tr>
         </thead>
         <tbody>
@@ -132,7 +131,6 @@
                 <td>{{ promotion.id }}</td>
                 <td>{{ promotion.name }}</td>
                 <td>{{ promotion.discount }}</td>
-                <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                 {#<td>#}
                     {#<a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>#}
                 {#</td>#}
@@ -146,6 +144,6 @@
         </tbody>
     </table>
     {% else %}
-        <h3>No deleted promotions!</h3>
+        <p id="emptyAnnotation">No deleted promotions</p>
     {% endif %}
 {% endblock %}

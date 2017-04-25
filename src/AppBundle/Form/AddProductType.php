@@ -22,7 +22,7 @@ class AddProductType extends AbstractType
             ->add('quantity', NumberType::class)
             ->add('image_form', FileType::class,  [
                 'data_class' => null,
-                'required' => false
+                'required' => false,
             ] )
             ->add('price', MoneyType::class)
             ->add("category", EntityType::class, [

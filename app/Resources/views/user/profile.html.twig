@@ -1,26 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="panel-body">
-                <table class="table table-responsive">
-                    <tr>
-                        <th>Email</th>
-                        <td>{{ user.email }}</td>
-                    </tr>
-                    <tr>
-                        <th>Name</th>
-                        <td>{{ user.firstName }}</td>
-                        <td>{{ user.lastName }}</td>
-                    </tr>
-                    <tr>
-                        <th>Initial Cash</th>
-                        <td><strong>€{{ user.initialCash }}</strong></td>
-                    </tr>
-                </table>
-                <hr>
-                <a href="{{ path("profile_edit") }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>
+    <div>
+        <div class="container">
+            <p class="text-right"><a href="{{ path("profile_edit") }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a></p>
+            <div class="row">
+                <p id="profileLabel">Username
+                <p id="profileInfo">{{ user.username }}</p>
+                </p>
+                <br>
+                <p id="profileLabel">Email
+                    <p id="profileInfo">{{ user.email }}</p>
+                </p>
+                <br>
+                <p id="profileLabel">First name
+                    <p id="profileInfo">{{ user.firstName }}</p>
+                </p>
+                <br>
+                <p id="profileLabel">Last name
+                    <p id="profileInfo">{{ user.lastName }}</p>
+                </p>
+                <br>
+                <p id="profileLabel">Cash
+                <p id="profileInfo">{{ user.initialCash }} lv.</p>
+                </p>
+                <br>
+                <p id="profileLabel">Phone
+                <p id="profileInfo">{{ user.phone }}</p>
+                </p>
+                <br>
+                <p id="profileLabel">Address
+                <p id="profileInfo">{{ user.address }}</p>
+                </p>
+                <br>
             </div>
         </div>
     </div>

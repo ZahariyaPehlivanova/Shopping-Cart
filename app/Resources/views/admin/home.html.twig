@@ -2,16 +2,15 @@
 
 {% block body %}
     <div class="container">
-            <div class="col-xs-12">
-            <h1>Admin Panel</h1>
+            <div class="col-xs-12" id="adminMenu">
             <ul class="list-group">
                 {% if is_granted('ROLE_ADMIN')%}
-                     <li class="list-group-item"><a href="{{ path('get_all_users') }}">All Users</a></li>
+                     <a href="{{ path('get_all_users') }}"><li class="list-group-item" id="adminNav">All Users</li></a>
                 {% endif %}
-                <li class="list-group-item" id="adminNav"><a href="{{ path('allProducts') }}">All Products</a></li>
-                <li class="list-group-item" id="adminNav"><a href="{{ path('outOfStockProducts') }}">Out of stock products</a></li>
-                <li class="list-group-item" id="adminNav"><a href="{{ path('get_all_categories') }}">All Categories</a></li>
-                <li class="list-group-item" id="adminNav"><a href="{{ path('get_all_promotions') }}">All Promotions</a></li>
+                <a href="{{ path('allProducts') }}"><li class="list-group-item" id="adminNav">All Products</li></a>
+                <a href="{{ path('outOfStockProducts') }}"><li class="list-group-item" id="adminNav">Out of stock products</li></a>
+                <a href="{{ path('get_all_categories') }}"><li class="list-group-item" id="adminNav">All Categories</li></a>
+                <a href="{{ path('get_all_promotions') }}"><li class="list-group-item" id="adminNav">All Promotions</li></a>
             </ul>
         </div>
     </div>

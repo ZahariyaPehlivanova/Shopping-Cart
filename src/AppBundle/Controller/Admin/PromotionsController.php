@@ -219,6 +219,7 @@ class PromotionsController extends Controller
             foreach ($products as $product){
                 $realPrice = $product->getPrice();
                 $product->setPromotionPrice($realPrice);
+                $product->getPromotions()->removeElement($promotion);
                 $em->persist($product);
             }
             $category->getPromotions()->removeElement($promotion);

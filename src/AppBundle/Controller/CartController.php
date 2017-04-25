@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends Controller
 {
@@ -15,10 +16,17 @@ class CartController extends Controller
      *
      * @return Response
      */
-    public function viewCartAction()
+    public function viewCartAction(Request $request)
     {
         $user = $this->getUser();
         $products = $user->getProducts();
+
+        $pager = $this->get('knp_paginator');
+        $products = $pager->paginate(
+            $products,
+            $request->query->getInt('page', 1),
+            6
+        );
         $totalBill = $this->getTotalBill($products);
         return $this->render('cart/view_cart.html.twig', ['products' => $products, 'bill' => $totalBill,'user' => $user]);
     }
@@ -109,7 +117,8 @@ class CartController extends Controller
             return $this->redirectToRoute("allProducts");
         }
         else{
-            $this->addFlash("error", "You don't have enough cash to buy the products. Please, remove some of them and try again.");
+            $needed = $totalBill - $user->getInitialCash();
+            $this->addFlash("error", "You don't have enough cash to buy the products. You need $needed lv. more. Please, remove some of them and try again.");
             return $this->redirectToRoute("user_cart");
         }
     }

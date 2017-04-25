@@ -4,7 +4,6 @@
     <div class="container">
         <div class="row">
             <main class="col-md-12">
-                <h1>Add</h1>
                 {{ form_start(form) }}
                 <p>{{ form_row(form.name) }}</p>
                 <p>{{ form_row(form.description,{ 'label': 'Description' }) }}</p>
@@ -12,7 +11,7 @@
                 <p>{{ form_row(form.price) }} </p>
                 <p>{{ form_row(form.category) }}</p>
                 <p>{{ form_row(form.promotions) }}</p>
-                <p>{{ form_row(form.image_form,{ 'label': 'Click here to add a picture!' }) }}</p>
+                <p>{{ form_row(form.image_form,{ 'label': 'Image' }) }}</p>
                 <button type="submit" class="btn btn-primary" formnovalidate>Add</button>
                 {{ form_end(form) }}
             </main>

@@ -1,61 +1,111 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Product details</h1>
-
-    <div class="container">
-        <div class="row">
-            <div class="panel-body">
-                <table class="table table-responsive">
-                    <tr>
-                        <td><img src="/images/product/{{ product.image}}" style="width: 350px; height: 300px;"/></td>
-                    </tr>
-                    <tr>
-                        <th>Name</th>
-                        <td>{{ product.name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td>{{ product.description }}</td>
-                    </tr>
-                    <tr>
-                        <th>Quantity</th>
-                        <td>{{ product.quantity }}</td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td>{{ product.price }}</td>
-                    </tr>
-                    <tr>
-                        <th>Created on</th>
-                        <td>{% if product.createdOn %}{{ product.createdOn|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <th>Last updated on</th>
-                        <td>{% if product.updatedOn %}{{ product.updatedOn|date('Y-m-d H:i:s') }}{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <th>Seller</th>
-                        <td>{{ product.seller.username }}</td>
-                    </tr>
-                    <tr>
-                        <th>Category</th>
-                        <td>{{ product.category}}</td>
-                    </tr>
-                </table>
-                <hr>
-                <div>
-                    {% if app.user %}
-                    <a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}
-                        <a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>
-                        <form action="{{ path("product_delete", {"id": product.id}) }}" method="post">
-                            <button class="btn btn-danger delete-item" type="submit">Delete</button>
-                        </form>
+    <div>
+        <div class="container">
+            <div class="text-right">
+                {% if app.user %}
+                    <p style="display: inline-block">
+                        <a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}
+                            <a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>
+                            <form action="{{ path("product_delete", {"id": product.id}) }}" method="post">
+                                <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                            </form>
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+            <div class="row" id="productDetails">
+                <div><img src="/images/product/{{ product.image}}" style="width: 450px; height: 400px;"/></div>
+                <div >
+                    <p id="profileLabel">Name
+                        <p id="profileInfo">{{ product.name}}</p>
+                    </p>
+                    <br>
+                    <p id="profileLabel">Description
+                        <p id="profileInfo">{{ product.description }}</p>
+                    </p>
+                    <br>
+                    <p id="profileLabel">Quantity
+                        <p id="profileInfo">{{ product.quantity}}</p>
+                    </p>
+                    <br>
+                    {% if product.price != product.promotionPrice %}
+                        <p id="profileLabel">Price
+                            <p id="profileInfo"><strike>{{ product.price }} lv.</strike></p>
+                        </p>
+                        <p id="profileLabel">Promotion price
+                            <p id="profileInfo">{{ product.promotionPrice}} lv.</p>
+                        </p>
+                        {% else %}
+                        <p id="profileLabel">Price
+                            <p id="profileInfo">{{ product.price}} lv.</p>
+                        </p>
                     {% endif %}
-                    {% endif %}
-                </div>
+                    <br>
+                    <p id="profileLabel">Created on
+                    <p id="profileInfo">{{ product.createdOn|date('Y-m-d H:i:s')}}</p>
+                    </p>
+                    <br>
+                    <p id="profileLabel">Updated on
+                    <p id="profileInfo">{{ product.updatedOn|date('Y-m-d H:i:s') }}</p>
+                    </p>
+                    <br>
+                    <p id="profileLabel">Seller
+                    <p id="profileInfo">{{ product.seller.username }}</p>
+                    </p>
+                    <br>
+                    </p>
+                </p>
             </div>
         </div>
     </div>
 {% endblock %}
+
+
+
+{#{% block body %}#}
+    {#<h1>Product details</h1>#}
+
+    {#<div class="container">#}
+        {#<div class="row">#}
+            {#<div class="panel-body">#}
+                {#<table class="table table-responsive">#}
+                    {#<tr>#}
+                        {#<td><img src="/images/product/{{ product.image}}" style="width: 350px; height: 300px;"/></td>#}
+                    {#</tr>#}
+                  {##}
+                    {#<tr>#}
+                        {#<th>Created on</th>#}
+                        {#<td>{% if product.createdOn %}{{ product.createdOn|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+                    {#</tr>#}
+                    {#<tr>#}
+                        {#<th>Last updated on</th>#}
+                        {#<td>{% if product.updatedOn %}{{ product.updatedOn|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+                    {#</tr>#}
+                    {#<tr>#}
+                        {#<th>Seller</th>#}
+                        {#<td>{{ product.seller.username }}</td>#}
+                    {#</tr>#}
+                    {#<tr>#}
+                        {#<th>Category</th>#}
+                        {#<td>{{ product.category}}</td>#}
+                    {#</tr>#}
+                {#</table>#}
+                {#<hr>#}
+                {#<div>#}
+                    {#{% if app.user %}#}
+                        {#<a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>#}
+                        {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}#}
+                            {#<a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>#}
+                            {#<form action="{{ path("product_delete", {"id": product.id}) }}" method="post">#}
+                                {#<button class="btn btn-danger delete-item" type="submit">Delete</button>#}
+                            {#</form>#}
+                        {#{% endif %}#}
+                    {#{% endif %}#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
+    {#</div>#}
+{#{% endblock %}#}
