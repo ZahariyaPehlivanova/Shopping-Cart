@@ -38,6 +38,9 @@
                 </div>
             </div>
         </div>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(products) }}
+        </div>
     {% else %}
         <p>No products to show</p>
     {% endif %}

@@ -25,11 +25,10 @@
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
                         <td>{{ promotion.discount }}</td>
-                        <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>{{ promotion.categories|join(", ") }}</td>
-                        {#<td>#}
-                            {#<a href="{{ path("admin_edit_category_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>#}
-                        {#</td>#}
+                        <td>
+                            <a href="{{ path("admin_edit_category_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
+                        </td>
                         <td>
                             <form action="{{ path("admin_delete_category_promotion", {"id": promotion.id}) }}" method="post">
                                 <button class="btn btn-danger delete-item" type="submit">Delete</button>
@@ -63,7 +62,6 @@
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
                         <td>{{ promotion.discount }}</td>
-                        <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>{{ promotion.products|join(", ") }}</td>
                         <td>
                             <a href="{{ path("admin_edit_product_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
@@ -100,7 +98,6 @@
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
                         <td>{{ promotion.discount }}</td>
-                        <td>{% if promotion.duration %}{{ promotion.duration|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>
                             <a href="{{ path("admin_edit_allProducts_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>
                         </td>

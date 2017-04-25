@@ -17,3 +17,7 @@ services:
           autowire: true
           tags:
               - { name: doctrine.event_subscriber }
+
+  price_calculator:
+        class: AppBundle\Service\PriceCalculator
+        arguments: ['@doctrine.orm.entity_manager']

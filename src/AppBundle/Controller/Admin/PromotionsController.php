@@ -48,19 +48,7 @@ class PromotionsController extends Controller
             /** @var Product[]|ArrayCollection $products */
             $products = $promotion->getProducts();
 
-            foreach ($products as $product){
-                $oldPrice = $product->getPrice();
-                $discountInPercentage = $promotion->getDiscount() / 100;
-                $newPrice = $oldPrice - ($oldPrice * $discountInPercentage);
-
-                if ($product->getPromotionPrice() > $newPrice) {
-                    $product->setPromotionPrice($newPrice);
-                    $productOldPromotion = $product->getPromotions()[0];
-                    $product->getPromotions()->removeElement($productOldPromotion);
-                }
-                $product->addPromotion($promotion);
-                $em->persist($product);
-            }
+            $this->addPromoForEachProduct($em, $products, $promotion);
 
             $em->persist($promotion);
             $em->flush();
@@ -90,27 +78,12 @@ class PromotionsController extends Controller
             /** @var Product[]|ArrayCollection $products */
             $products = $promotion->getProducts();
 
-            foreach ($products as $product){
-                $oldPrice = $product->getPrice();
-                $discountInPercentage = $promotion->getDiscount() / 100;
-                $newPrice = $oldPrice - ($oldPrice * $discountInPercentage);
-
-                if ($product->getPromotionPrice() > $newPrice) {
-                    $product->setPromotionPrice($newPrice);
-                    $productOldPromotion = $product->getPromotions()[0];
-                    $product->getPromotions()->removeElement($productOldPromotion);
-                }
-                if(!$product->getPromotions()->contains($promotion)){
-                    $product->addPromotion($promotion);
-                }
-
-                $em->persist($product);
-            }
+            $this->addPromoForEachProduct($em, $products, $promotion);
 
             $em->persist($promotion);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Promotion was created successfully!');
+            $this->get('session')->getFlashBag()->add('success', 'Promotion edited successfully!');
 
             return $this->redirectToRoute('get_all_promotions');
         }
@@ -168,18 +141,9 @@ class PromotionsController extends Controller
 
                 /** @var Product[]|ArrayCollection $products */
                 $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
-                foreach ($products as $product){
-                    $oldPrice = $product->getPrice();
-                    $discountInPercentage = $promotion->getDiscount() / 100;
-                    $newPrice = $oldPrice - ($oldPrice * $discountInPercentage);
 
-                    if ($product->getPromotionPrice() > $newPrice) {
-                        $product->setPromotionPrice($newPrice);
-                        $productOldPromotion = $product->getPromotions()[0];
-                        $product->getPromotions()->removeElement($productOldPromotion);
-                    }
-                    $em->persist($product);
-                }
+                $this->addPromoForEachProduct($em, $products, $promotion);
+
                 $em->persist($category);
             }
 
@@ -192,6 +156,49 @@ class PromotionsController extends Controller
         }
 
         return $this->render(':admin/promotions:admin_category_promotion_add.html.twig', [
+                'promotion' => $promotion,
+                'form'    => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("admin/edit/categoryPromotion/{id}", name="admin_edit_category_promotion")
+     * @return Response
+     */
+    public function editCategoryPromotionAction(Promotion $promotion, Request $request)
+    {
+        $form = $this->createForm(AddAndEditCategoryPromotionType::class, $promotion);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            $categories = $promotion->getCategories();
+            foreach ($categories as $category)
+            {
+                if(!$category->getPromotions()->contains($promotion)){
+                    $category->addPromotion($promotion);
+                }
+
+                /** @var Product[]|ArrayCollection $products */
+                $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
+
+                $this->addPromoForEachProduct($em, $products, $promotion);
+
+                $em->persist($category);
+            }
+
+            $em->persist($promotion);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Promotion edited successfully!');
+
+            return $this->redirectToRoute('get_all_promotions');
+        }
+
+        return $this->render(':admin/promotions:admin_category_promotion_edit.html.twig', [
                 'promotion' => $promotion,
                 'form'    => $form->createView(),
             ]
@@ -242,20 +249,8 @@ class PromotionsController extends Controller
 
             /** @var Product[]|ArrayCollection $products */
             $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
-            foreach ($products as $product){
 
-                $oldPrice = $product->getPrice();
-                $discountInPercentage = $promotion->getDiscount() / 100;
-                $newPrice = $oldPrice - ($oldPrice * $discountInPercentage);
-
-                if ($product->getPromotionPrice() > $newPrice) {
-                    $product->setPromotionPrice($newPrice);
-                    $productOldPromotion = $product->getPromotions()[0];
-                    $product->getPromotions()->removeElement($productOldPromotion);
-                }
-                $product->addPromotion($promotion);
-                $em->persist($product);
-            }
+            $this->addPromoForEachProduct($em, $products, $promotion);
 
             $em->persist($promotion);
             $em->flush();
@@ -273,12 +268,11 @@ class PromotionsController extends Controller
     }
 
     /**
-     * @Route("admin/edit/allProductsPromotion", name="admin_edit_allProducts_promotion")
+     * @Route("admin/edit/allProductsPromotion/{id}", name="admin_edit_allProducts_promotion")
      * @return Response
      */
     public function editAllProductsPromotionAction(Promotion $promotion, Request $request)
     {
-        $promotion = new Promotion();
         $form = $this->createForm(AddAndEditAllProductsPromotionType::class, $promotion);
         $form->handleRequest($request);
 
@@ -288,30 +282,18 @@ class PromotionsController extends Controller
 
             /** @var Product[]|ArrayCollection $products */
             $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
-            foreach ($products as $product){
 
-                $oldPrice = $product->getPrice();
-                $discountInPercentage = $promotion->getDiscount() / 100;
-                $newPrice = $oldPrice - ($oldPrice * $discountInPercentage);
-
-                if ($product->getPromotionPrice() > $newPrice) {
-                    $product->setPromotionPrice($newPrice);
-                    $productOldPromotion = $product->getPromotions()[0];
-                    $product->getPromotions()->removeElement($productOldPromotion);
-                }
-                $product->addPromotion($promotion);
-                $em->persist($product);
-            }
+            $this->addPromoForEachProduct($em, $products, $promotion);
 
             $em->persist($promotion);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Promotion was created successfully!');
+            $this->get('session')->getFlashBag()->add('success', 'Promotion edited successfully!');
 
             return $this->redirectToRoute('get_all_promotions');
         }
 
-        return $this->render('admin/promotions/admin_all_products_promotion_add.html.twig', [
+        return $this->render('admin/promotions/admin_all_products_promotion_edit.html.twig', [
                 'promotion' => $promotion,
                 'form'    => $form->createView(),
             ]
@@ -355,5 +337,14 @@ class PromotionsController extends Controller
         $this->addFlash("success", "Promotion {$promotion->getName()} restored successfully!");
 
         return $this->redirectToRoute("get_all_promotions");
+    }
+
+   private function addPromoForEachProduct($em, $products, $promotion){
+        foreach ($products as $product){
+            if(!$product->getPromotions()->contains($promotion)){
+                $product->addPromotion($promotion);
+            }
+            $em->persist($product);
+        }
     }
 }

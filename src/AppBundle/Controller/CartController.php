@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,11 +84,20 @@ class CartController extends Controller
     {
         $user = $this->getUser();
 
+        /** @var Product[]|ArrayCollection $products */
         $products = $user->getProducts();
         $totalBill = $this->getTotalBill($products);
 
         if($user->getInitialCash() >= $totalBill) {
             $em = $this->getDoctrine()->getManager();
+            foreach ($products as $product){
+                $seller = $product->getSeller();
+
+                $sellerOldMoney = $seller->getInitialCash();
+                $seller->setInitialCash($sellerOldMoney + $product->getPromotionPrice());
+                $em->persist($seller);
+            }
+
             $cash = $user->getInitialCash();
             $user->setInitialCash($cash -= $totalBill);
 

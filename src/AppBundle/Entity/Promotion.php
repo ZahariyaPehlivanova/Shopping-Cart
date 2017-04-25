@@ -42,15 +42,33 @@ class Promotion
      */
     private $discount;
 
+//    /**
+//     * @var \DateTime
+//     *
+//     * @ORM\Column(name="duration", type="datetime")
+//     * @Assert\GreaterThan("today")
+//     * @Assert\NotBlank()
+//     * @Assert\Date()
+//     */
+//    private $duration;
+
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="duration", type="datetime")
-     * @Assert\GreaterThan("today")
+     * @ORM\Column(name="start_date", type="date")
      * @Assert\NotBlank()
      * @Assert\Date()
      */
-    private $duration;
+    private $startDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="end_date", type="date")
+     * @Assert\NotBlank()
+     * @Assert\Date()
+     */
+    private $endDate;
 
     /**
      * @var boolean
@@ -127,22 +145,22 @@ class Promotion
     {
         $this->discount = $discount;
     }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    /**
-     * @param \DateTime $duration
-     */
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-    }
+//
+//    /**
+//     * @return \DateTime
+//     */
+//    public function getDuration()
+//    {
+//        return $this->duration;
+//    }
+//
+//    /**
+//     * @param \DateTime $duration
+//     */
+//    public function setDuration($duration)
+//    {
+//        $this->duration = $duration;
+//    }
 
     /**
      * @return bool
@@ -190,6 +208,38 @@ class Promotion
     public function setCategories($categories)
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param \DateTime $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @param \DateTime $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
     }
 
     public function __toString()

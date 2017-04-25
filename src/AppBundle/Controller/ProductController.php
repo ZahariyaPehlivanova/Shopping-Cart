@@ -6,6 +6,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Form\AddProductType;
 use AppBundle\Form\ProductEditType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -27,10 +28,19 @@ class ProductController extends Controller
      */
     public function listAllProductsAction(Request $request)
     {
-        $pager = $this->get('knp_paginator');
+        /** @var Product[]|ArrayCollection $products */
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
-        $products = $this->checkPromotions($products);
 
+        $calc = $this->get('price_calculator');
+        $em = $this->getDoctrine()->getManager();
+        foreach ($products as $product){
+            $promoPrice = $calc->calcPrice($product);
+            $product->setPromotionPrice($promoPrice);
+            $em->persist($product);
+        }
+        $em->flush();
+
+        $pager = $this->get('knp_paginator');
         $products = $pager->paginate(
             $products,
             $request->query->getInt('page', 1),
@@ -47,10 +57,17 @@ class ProductController extends Controller
      * @param Category $category
      * @return Response
      */
-    public function productsByCategoryAction(Category $category)
+    public function productsByCategoryAction(Category $category, Request $request)
     {
+        $pager = $this->get('knp_paginator');
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
-        $products = $this->checkPromotions($products);
+       // $products = $this->checkPromotions($products);
+
+        $products = $pager->paginate(
+            $products,
+            $request->query->getInt('page', 1),
+            6
+        );
 
         return $this->render("product/all_by_category.html.twig", [
             "products" => $products,
@@ -202,30 +219,30 @@ class ProductController extends Controller
         return $isAdmin || $isEditor || $isSeller;
     }
 
-    private function checkPromotions($products){
-        $em = $this->getDoctrine()->getManager();
-        foreach ($products as $product){
-            $promotions = $product->getPromotions();
-            if(count($promotions) > 0){
-                foreach ($promotions as $promotion) {
-                    if ($promotion->getIsDeleted() == false) {
-                        $now = new DateTime();
-                        if($promotion->getDuration() < $now){
-                            $oldPrice = $product->getPrice();
-                            $discountInPercentage = $promotion->getDiscount() / 100;
-                            $newPrice = $oldPrice + ($oldPrice * $discountInPercentage);
-                            $product->setPrice($newPrice);
-                            $promotion->setIsDeleted(true);
-
-                            $em->persist($promotion);
-                            $em->persist($product);
-                            $em->flush();
-                        }
-                    }
-                }
-            }
-        }
-        return $products;
-    }
+//    private function checkPromotions($products){
+//        $em = $this->getDoctrine()->getManager();
+//        foreach ($products as $product){
+//            $promotions = $product->getPromotions();
+//            if(count($promotions) > 0){
+//                foreach ($promotions as $promotion) {
+//                    if ($promotion->getIsDeleted() == false) {
+//                        $now = new DateTime();
+//                        if($promotion->getDuration() < $now){
+//                            $oldPrice = $product->getPrice();
+//                            $discountInPercentage = $promotion->getDiscount() / 100;
+//                            $newPrice = $oldPrice + ($oldPrice * $discountInPercentage);
+//                            $product->setPrice($newPrice);
+//                            $promotion->setIsDeleted(true);
+//
+//                            $em->persist($promotion);
+//                            $em->persist($product);
+//                            $em->flush();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return $products;
+//    }
 }
 

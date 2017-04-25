@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -331,7 +332,7 @@ class Product
     /**
      * Get buyers
      *
-     * @return array
+     * @return ArrayCollection
      */
     public function getBuyers()
     {

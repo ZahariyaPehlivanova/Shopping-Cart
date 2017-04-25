@@ -17,7 +17,8 @@ class AddAndEditAllProductsPromotionType extends AbstractType
     {
         $builder->add('name', TextType::class)
             ->add('discount', NumberType::class)
-            ->add('duration', DateType::class);
+            ->add('start_date', DateType::class)
+            ->add('end_date', DateType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
