@@ -18,11 +18,15 @@ class UserController extends Controller
     /**
      * @Route("/register", name="user_register_form")
      * @Method("GET")
-     * @Security("is_anonymous()")
      * @return Response
      */
     public function registerAction()
     {
+        if($this->getUser()){
+            $this->addFlash("error", "You are already have registration and you are logged in!");
+            return $this->redirectToRoute("allProducts");
+        }
+
         $form = $this->createForm(UserRegistrationType::class);
         return $this->render('user/register.html.twig', ['form' => $form->createView()]);
     }
@@ -34,6 +38,10 @@ class UserController extends Controller
      */
     public function registerProcessAction(Request $request)
     {
+        if($this->getUser()){
+            $this->addFlash("error", "You are already have registration and you are logged in!");
+            return $this->redirectToRoute("allProducts");
+        }
         $user = new User();
         $em = $this->getDoctrine()->getManager();
 

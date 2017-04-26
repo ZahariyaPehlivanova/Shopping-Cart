@@ -36,5 +36,5 @@ security:
         - {path: ^/admin, roles: [ROLE_ADMIN, ROLE_EDITOR]}
         - {path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - {path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - {path: ^/images, role: IS_AUTHENTICATED_FULLY}
+        - {path: ^/profile, role: IS_AUTHENTICATED_FULLY}
 

@@ -30,21 +30,7 @@ class PromotionRepository extends \Doctrine\ORM\EntityRepository
      * @return Promotion
      */
     public function fetchBiggestPromotion(Product $product){
-        $qb = $this->createQueryBuilder('p');
         $today = new \DateTime();
-
-//       return $qb->select('p')
-//            ->where($qb->expr()->lte('p.startDate', ':today'))
-//            ->andWhere($qb->expr()->gte('p.endDate', ':today'))
-//            ->setParameter(':today', $today->format('Y-m-d'))
-//            ->andWhere('p.isDeleted = :isDeleted')
-//            ->setParameter('isDeleted', false)
-//            ->andWhere($qb->expr()->in('p.products',':product'))
-//            ->setParameter(':product', $product)
-//            ->orderBy('p.discount', 'DESC')
-//            ->setMaxResults(1)
-//            ->getQuery()
-//           ->execute();
 
         $q =  $this->createQueryBuilder("promotion")
             ->join("promotion.products", "product")
@@ -59,6 +45,5 @@ class PromotionRepository extends \Doctrine\ORM\EntityRepository
             ->getOneOrNullResult();
 
         return $q;
-
     }
 }

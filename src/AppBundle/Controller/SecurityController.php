@@ -11,9 +11,13 @@ class SecurityController extends Controller
 {
     /**
      * @Route("/login", name="security_login")
-     * @Security("is_anonymous()")
      */
     public function loginAction(){
+        if($this->getUser()){
+            $this->addFlash("error", "You are already logged in!");
+            return $this->redirectToRoute("allProducts");
+        }
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $error = $authenticationUtils->getLastAuthenticationError();

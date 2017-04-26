@@ -82,7 +82,7 @@ class UsersController extends Controller
     public function userPossessionsAction(User $user)
     {
         if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
-            $this->addFlash("error", "You are not allowed to see the users!");
+            $this->addFlash("error", "You are not allowed to see the possessions of the users!");
             return $this->redirectToRoute("allProducts");
         }
 
@@ -100,7 +100,7 @@ class UsersController extends Controller
     public function removeUserPossessionAction(Product $product,User $user)
     {
         if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
-            $this->addFlash("error", "You are not allowed to see the users!");
+            $this->addFlash("error", "You are not allowed to remove user's possession!");
             return $this->redirectToRoute("allProducts");
         }
         $user->getProducts()->removeElement($product);

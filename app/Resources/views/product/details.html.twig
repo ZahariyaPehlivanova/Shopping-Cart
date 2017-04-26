@@ -4,9 +4,11 @@
     <div>
         <div class="container">
             <div class="text-right">
-                {% if app.user %}
+               {% if app.user %}
                     <p style="display: inline-block">
-                        <a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>
+                       {% if is_granted('ROLE_USER') %}
+                           <a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>
+                       {% endif %}
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}
                             <a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>
                             <form action="{{ path("product_delete", {"id": product.id}) }}" method="post">
@@ -16,9 +18,12 @@
                     </p>
                 {% endif %}
             </div>
+
+            <div id="rating">Rating {{ product.rating / 6 }} / 6</div>
+
             <div class="row" id="productDetails">
                 <div><img src="/images/product/{{ product.image}}" style="width: 450px; height: 400px;"/></div>
-                <div >
+                <div>
                     <p id="profileLabel">Name
                         <p id="profileInfo">{{ product.name}}</p>
                     </p>
@@ -60,52 +65,22 @@
                 </p>
             </div>
         </div>
+
+            <div>
+            {% if app.user %}
+                <a href="{{ path("add_review", {"id": product.id}) }}" style="margin: 5px; text-align: right" class="btn btn-info">Leave review<span class="glyphicon glyphicon-info-sign"></span></a>
+            {% endif %}
+            </div>
+            <div class="reviews">
+                    {% for review in reviews %}
+                        <div id="currentReview">
+                            <p>{{ review.author.username }}:</p>
+                            <p> {{ review.comment }}</p>
+                            <p> {{ review.addedOn|date('Y-m-d H:i:s') }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
-
-
-
-{#{% block body %}#}
-    {#<h1>Product details</h1>#}
-
-    {#<div class="container">#}
-        {#<div class="row">#}
-            {#<div class="panel-body">#}
-                {#<table class="table table-responsive">#}
-                    {#<tr>#}
-                        {#<td><img src="/images/product/{{ product.image}}" style="width: 350px; height: 300px;"/></td>#}
-                    {#</tr>#}
-                  {##}
-                    {#<tr>#}
-                        {#<th>Created on</th>#}
-                        {#<td>{% if product.createdOn %}{{ product.createdOn|date('Y-m-d H:i:s') }}{% endif %}</td>#}
-                    {#</tr>#}
-                    {#<tr>#}
-                        {#<th>Last updated on</th>#}
-                        {#<td>{% if product.updatedOn %}{{ product.updatedOn|date('Y-m-d H:i:s') }}{% endif %}</td>#}
-                    {#</tr>#}
-                    {#<tr>#}
-                        {#<th>Seller</th>#}
-                        {#<td>{{ product.seller.username }}</td>#}
-                    {#</tr>#}
-                    {#<tr>#}
-                        {#<th>Category</th>#}
-                        {#<td>{{ product.category}}</td>#}
-                    {#</tr>#}
-                {#</table>#}
-                {#<hr>#}
-                {#<div>#}
-                    {#{% if app.user %}#}
-                        {#<a href="{{ path("cart_add_product", {"id": product.id}) }}" class="btn btn-info">Add to cart<span class="glyphicon glyphicon-info-sign"></span></a>#}
-                        {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or product.seller.id == app.user.id %}#}
-                            {#<a href="{{ path("product_edit", {"id": product.id}) }}" class="btn btn-warning">Edit <span class="glyphicon glyphicon-edit"></span></a>#}
-                            {#<form action="{{ path("product_delete", {"id": product.id}) }}" method="post">#}
-                                {#<button class="btn btn-danger delete-item" type="submit">Delete</button>#}
-                            {#</form>#}
-                        {#{% endif %}#}
-                    {#{% endif %}#}
-                {#</div>#}
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-{#{% endblock %}#}

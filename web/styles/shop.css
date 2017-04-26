@@ -48,6 +48,44 @@ a:hover, a:active{
     justify-content: space-between;
 }
 
+.reviews{
+    margin-bottom: 20px;
+    border: solid #333;
+    border-radius: 5px;
+    width: 750px;
+}
+
+#currentReview{
+    border-bottom: solid darkgray;
+    border-bottom-width: 1px;
+}
+
+#currentReview p:first-child{
+    color: #a94442; font-weight: bold;
+    width: 80px;
+}
+
+#currentReview p{
+    display: inline-block;
+    margin: 10px;
+}
+
+#currentReview p:last-child{
+    color: darkgray;
+    font-weight: bold;
+    text-align: right;
+    float: right;
+}
+
+#rating{
+    background-color: #a94442;
+    height: 23px;
+    width: 100px;
+    text-align: center;
+    border-radius: 7px;
+    color: whitesmoke;
+}
+
 input, textarea{
     width: 100%;
     padding: 12px 20px;

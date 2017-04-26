@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Review;
 use AppBundle\Form\AddProductType;
 use AppBundle\Form\ProductEditType;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -60,7 +61,6 @@ class ProductController extends Controller
     {
         $pager = $this->get('knp_paginator');
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
-       // $products = $this->checkPromotions($products);
 
         $products = $pager->paginate(
             $products,
@@ -80,8 +80,12 @@ class ProductController extends Controller
      */
     public function productDetailsAction(Product $product)
     {
+        /** @var Review[]|ArrayCollection $reviews */
+        $reviews = $this->getDoctrine()->getRepository(Review::class)->findAllActiveReviewsForProduct($product);
+
         return $this->render(":product:details.html.twig", [
-            "product" => $product
+            "product" => $product,
+            "reviews" => $reviews
         ]);
     }
 
@@ -217,31 +221,5 @@ class ProductController extends Controller
         $isSeller = $product->getSeller()->getId() == $this->getUser()->getId();
         return $isAdmin || $isEditor || $isSeller;
     }
-
-//    private function checkPromotions($products){
-//        $em = $this->getDoctrine()->getManager();
-//        foreach ($products as $product){
-//            $promotions = $product->getPromotions();
-//            if(count($promotions) > 0){
-//                foreach ($promotions as $promotion) {
-//                    if ($promotion->getIsDeleted() == false) {
-//                        $now = new DateTime();
-//                        if($promotion->getDuration() < $now){
-//                            $oldPrice = $product->getPrice();
-//                            $discountInPercentage = $promotion->getDiscount() / 100;
-//                            $newPrice = $oldPrice + ($oldPrice * $discountInPercentage);
-//                            $product->setPrice($newPrice);
-//                            $promotion->setIsDeleted(true);
-//
-//                            $em->persist($promotion);
-//                            $em->persist($product);
-//                            $em->flush();
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return $products;
-//    }
 }
 

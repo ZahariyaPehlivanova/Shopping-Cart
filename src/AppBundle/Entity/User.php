@@ -83,7 +83,7 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
      * @ORM\JoinTable(name="users_roles")
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var Product[]|ArrayCollection
@@ -91,12 +91,20 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product", inversedBy="users")
      * @ORM\JoinTable(name="cart")
      */
-    private $products = [];
+    private $products;
+
+    /**
+     * @var Review[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Review", mappedBy="author")
+     */
+    private $reviews;
 
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
         $this->initialCash = 2000;
     }
 

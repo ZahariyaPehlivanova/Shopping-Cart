@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -99,6 +98,13 @@ class Product
     private $buyers;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="rating", type="integer")
+     */
+    private $rating = 0;
+
+    /**
      * @var Category $category
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="products")
      * @Assert\NotBlank()
@@ -112,6 +118,13 @@ class Product
      * @var ArrayCollection
      */
     private $promotions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Review", mappedBy="product")
+     *
+     * @var Review[]|ArrayCollection $reviews
+    */
+    private $reviews;
 
     /**
      * Get id
@@ -407,6 +420,40 @@ class Product
     {
         $this->promotionPrice = $promotionPrice;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * @param mixed $reviews
+     */
+    public function setReviews($reviews)
+    {
+        $this->reviews = $reviews;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @param int $rating
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    }
+
+
 
     public function __toString()
     {

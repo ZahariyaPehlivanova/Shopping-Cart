@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <main class="col-md-12">
+                {{ form_start(form) }}
+                <p>{{ form_row(form.comment) }}</p>
+                <p>{{ form_row(form.rating) }}</p>
+
+                <button type="submit" class="btn btn-primary" formnovalidate>Add</button>
+                {{ form_end(form) }}
+            </main>
+        </div>
+    </div>
+{% endblock %}

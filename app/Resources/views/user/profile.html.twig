@@ -21,6 +21,9 @@
                     <p id="profileInfo">{{ user.lastName }}</p>
                 </p>
                 <br>
+                <p id="profileLabel">Roles
+                <p id="profileInfo">{{ user.roles|join(", ")}}</p>
+                </p>
                 <p id="profileLabel">Cash
                 <p id="profileInfo">{{ user.initialCash }} lv.</p>
                 </p>

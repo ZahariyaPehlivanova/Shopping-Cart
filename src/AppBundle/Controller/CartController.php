@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,14 @@ class CartController extends Controller
      * @Route("cart", name="user_cart")
      *
      * @return Response
+     * @Security("is_authenticated()")
      */
     public function viewCartAction(Request $request)
     {
+        if($this->isAdminOrEditor()){
+            $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
+            return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
+        }
         $user = $this->getUser();
         $products = $user->getProducts();
 
@@ -34,10 +40,16 @@ class CartController extends Controller
     /**
      * @Route("cart/add/{id}", name="cart_add_product")
      *
+     * @Security("is_authenticated()")
      * @return Response
      */
     public function addToCartAction(Product $product)
     {
+        if($this->isAdminOrEditor()){
+            $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
+            return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
+        }
+
         $user = $this->getUser();
 
         if($user->getProducts()->contains($product)){
@@ -62,11 +74,16 @@ class CartController extends Controller
 
     /**
      * @Route("cart/remove/{id}", name="cart_remove_product")
-     *
+     * @Security("is_authenticated()")
      * @return Response
      */
     public function removeFromCartAction(Product $product)
     {
+        if($this->isAdminOrEditor()){
+            $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
+            return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
+        }
+
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $user->getProducts()->removeElement($product);
@@ -85,11 +102,15 @@ class CartController extends Controller
 
     /**
      * @Route("cart/checkout", name="cart_checkout")
-     *
+     * @Security("is_authenticated()")
      * @return Response
      */
     public function checkoutCartAction()
     {
+        if($this->isAdminOrEditor()){
+            $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
+            return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
+        }
         $user = $this->getUser();
 
         /** @var Product[]|ArrayCollection $products */
@@ -136,5 +157,11 @@ class CartController extends Controller
             $products->removeElement($product);
         }
         return $products;
+    }
+
+    private function isAdminOrEditor(){
+        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
+        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
+        return $isAdmin || $isEditor;
     }
 }
