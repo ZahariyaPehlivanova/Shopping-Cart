@@ -62,7 +62,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $password = $credentials['_password'];
         //$this->passwordEncoder->isPasswordValid($user, $password)
-        if($password == '123'){
+        if($this->passwordEncoder->isPasswordValid($user, $password)){
             return true;
         }
         return false;

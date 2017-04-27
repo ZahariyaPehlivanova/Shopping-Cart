@@ -33,10 +33,12 @@ class ReviewController extends Controller
             $review->setAuthor($this->getUser());
             $review->setProduct($product);
 
+            $em = $this->getDoctrine()->getManager();
+
             $currRating = $product->getRating();
             $product->setRating($currRating + $review->getRating());
+            $em->persist($product);
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($review);
             $em->flush();
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Review;
 use AppBundle\Entity\User;
 use AppBundle\Form\Admin\EditUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -74,6 +75,54 @@ class UsersController extends Controller
         $this->addFlash("success", "User {$user->getEmail()} deleted successfully!");
 
         return $this->redirectToRoute("get_all_users");
+    }
+
+    /**
+     * @Route("admin/user/reviews/{id}", name="get_user_reviews")
+     */
+    public function userReviewsAction(User $user)
+    {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to see the reviews of the users!");
+            return $this->redirectToRoute("allProducts");
+        }
+
+        $reviews = $user->getReviews();
+
+        return $this->render(":admin/users:user_reviews.html.twig", [
+            "reviews" => $reviews,
+            "user" => $user
+        ]);
+    }
+
+    /**
+     * @Route("admin/user/removeReview/{id}/{user}", name="remove_user_review")
+     */
+    public function removeUserReviewAction(Review $review, User $user)
+    {
+        if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
+            $this->addFlash("error", "You are not allowed to remove user's review!");
+            return $this->redirectToRoute("allProducts");
+        }
+
+        $user->getReviews()->removeElement($review);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->remove($review);
+        $product = $review->getProduct();
+        $oldRating = $product->getRating();
+        $product->setRating($oldRating - $review->getRating());
+
+        $em->persist($product);
+        $em->flush();
+
+        $this->addFlash("success", "User review removed successfully!");
+
+        return $this->render(":admin/users:user_reviews.html.twig", [
+            "reviews" => $user->getReviews(),
+            "user" => $user
+        ]);
     }
 
     /**

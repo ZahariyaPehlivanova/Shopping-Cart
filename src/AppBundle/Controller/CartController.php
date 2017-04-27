@@ -20,7 +20,7 @@ class CartController extends Controller
      */
     public function viewCartAction(Request $request)
     {
-        if($this->isAdminOrEditor()){
+        if(!$this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }
@@ -45,7 +45,7 @@ class CartController extends Controller
      */
     public function addToCartAction(Product $product)
     {
-        if($this->isAdminOrEditor()){
+        if($this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }
@@ -79,7 +79,7 @@ class CartController extends Controller
      */
     public function removeFromCartAction(Product $product)
     {
-        if($this->isAdminOrEditor()){
+        if($this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }
@@ -107,7 +107,7 @@ class CartController extends Controller
      */
     public function checkoutCartAction()
     {
-        if($this->isAdminOrEditor()){
+        if($this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }
@@ -159,9 +159,7 @@ class CartController extends Controller
         return $products;
     }
 
-    private function isAdminOrEditor(){
-        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
-        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
-        return $isAdmin || $isEditor;
+    private function hasUserRole(){
+        return $this->isGranted('ROLE_USER', $this->getUser());
     }
 }

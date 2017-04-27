@@ -29,6 +29,9 @@
                 <td>{{ user.address }}</td>
                 <td>{{ user.roles|join(", ") }}</td>
                 <td>
+                    <a href="{{ path("get_user_reviews", {"id": user.id}) }}" class="btn btn-info">Reviews</a>
+                </td>
+                <td>
                     <a href="{{ path("get_user_possessions", {"id": user.id}) }}" class="btn btn-info">Possessions</a>
                 </td>
                 <td>

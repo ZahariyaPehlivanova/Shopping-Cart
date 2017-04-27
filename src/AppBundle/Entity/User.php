@@ -376,5 +376,21 @@ class User implements UserInterface
     public function buyProduct(Product $product){
         $this->products[] = $product;
     }
+
+    /**
+     * @return Review[]|ArrayCollection
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * @param Review[]|ArrayCollection $reviews
+     */
+    public function setReviews($reviews)
+    {
+        $this->reviews = $reviews;
+    }
 }
 

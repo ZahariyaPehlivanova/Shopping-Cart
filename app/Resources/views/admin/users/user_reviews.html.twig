@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if reviews|length > 0 %}
+        <div>
+            <h1> {{ user.username }} reviews</h1>
+            <div class="container">
+                <div class="row">
+                    <main class="col-md-9">
+                        <table class="table table-responsive table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Comment</th>
+                                <th>Rating</th>
+                                <th>Product</th>
+                                <th>Added on</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for review in reviews %}
+                                <tr>
+                                    <td>{{ review.id}}</td>
+                                    <td>{{ review.comment}}</td>
+                                    <td>{{ review.rating}}</td>
+                                    <td>{{ review.product.name }}</td>
+                                    <td>{{ review.addedOn|date('Y-m-d H:i:s') }}</td>
+                                    <td>
+                                        <form action="{{ path("remove_user_review", {"id": review.id, "user": user.id}) }}" method="post">
+                                            <button class="btn btn-danger delete-item" type="submit">Delete review</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </main>
+                </div>
+            </div>
+        </div>
+{% else %}
+    <p id="emptyAnnotation">No reviews to show</p>
+{% endif %}
+{% endblock %}
