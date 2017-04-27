@@ -1,62 +1,59 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ZahariyaPC
- * Date: 13/04/2017
- * Time: 20:18
- */
 
 namespace AppBundle\Doctrine;
 
-use AppBundle\Entity\User;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use AppBundle\Entity\User;
 
 class HashPasswordListener implements EventSubscriber
 {
-    private $passwordEncoder;
+    private $userPasswordEncoder;
 
-    public function __construct(UserPasswordEncoder $passwordEncoder)
+    public function __construct(UserPasswordEncoder $userPasswordEncoder)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    public function prePersist(LifecycleEventArgs $args)
-    {
-        $entity = $args->getEntity();
-        if(!$entity instanceof User){
-            return;
-        }
-
-        $this->encodePassword($entity);
-    }
-
-    public function preUpdate(LifecycleEventArgs $args)
-    {
-        $entity = $args->getEntity();
-        if(!$entity instanceof User){
-            return;
-        }
-
-        $this->encodePassword($entity);
-        $em = $args->getEntityManager();
-        $meta = $em->getClassMetadata(get_class($entity));
-        $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta,$entity);
-    }
-
-    /**
-     * Returns an ar ray of events this subscriber wants to listen to.
-     *
-     * @return array
-     */
     public function getSubscribedEvents()
     {
-        return ['prePersist', 'preUpdate'];
+        return [
+            "prePersist", "preUpdate"
+        ];
     }
 
-    private function encodePassword(User $entity){
-        $encoded = $this->passwordEncoder->encodePassword($entity, $entity->getPlainPassword());
-        $entity->setPassword($encoded);
+    public function prePersist(LifecycleEventArgs $eventArgs)
+    {
+        $entity = $eventArgs->getEntity();
+        if (!$entity instanceof User) {
+            return;
+        }
+
+        $this->encodePassword($entity);
+    }
+
+    public function preUpdate(LifecycleEventArgs $eventArgs)
+    {
+        $entity = $eventArgs->getEntity();
+        if (!$entity instanceof User) {
+            return;
+        }
+
+        if ($entity->getPlainPassword() === null) {
+            return;
+        }
+
+        $this->encodePassword($entity);
+
+        $em = $eventArgs->getEntityManager();
+        $meta = $em->getClassMetadata(get_class($entity));
+        $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $entity);
+    }
+
+    public function encodePassword(User $entity)
+    {
+        $encodedPassword = $this->userPasswordEncoder->encodePassword($entity, $entity->getPlainPassword());
+        $entity->setPassword($encodedPassword);
     }
 }

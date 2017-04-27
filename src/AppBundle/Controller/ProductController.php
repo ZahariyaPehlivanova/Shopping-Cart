@@ -186,7 +186,7 @@ class ProductController extends Controller
 
                 $this->addFlash("success", "Product {$product->getName()} updated successfully!");
 
-                return $this->redirectToRoute("product_details", ['id' => $product->getId()]);
+                return $this->redirectToRoute("allProducts");
             }
         }
 

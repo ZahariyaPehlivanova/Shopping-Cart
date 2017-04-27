@@ -49,7 +49,7 @@ class UsersController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash("success", "User {$user->getEmail()} updated successfully!");
+            $this->addFlash("success", "User {$user->getUsername()} updated successfully!");
 
             return $this->redirectToRoute("get_all_users");
         }
@@ -67,6 +67,10 @@ class UsersController extends Controller
         if(!$this->isGranted('ROLE_ADMIN', $this->getUser())){
             $this->addFlash("error", "You are not allowed to delete this user!");
             return $this->redirectToRoute("allProducts");
+        }
+        $reviews = $user->getReviews();
+        foreach ($reviews as $review){
+            $this->removeUserReviewAction($review, $user);
         }
         $em = $this->getDoctrine()->getManager();
         $em->remove($user);

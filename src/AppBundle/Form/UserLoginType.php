@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserLoginType extends AbstractType
 {
@@ -13,5 +14,14 @@ class UserLoginType extends AbstractType
         $builder
             ->add('_username')
             ->add('_password', PasswordType::class);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'app_bundle_login_form';
     }
 }

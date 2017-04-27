@@ -9,16 +9,16 @@
                 {{ form_row(form.lastName) }}
                 {{ form_row(form.username) }}
                 {{ form_row(form.email) }}
-                {{ form_row(form.password.first, {
+                {{ form_row(form.plainPassword.first, {
                     'label': 'Password'
                 }) }}
-                {{ form_row(form.password.second, {
+                {{ form_row(form.plainPassword.second, {
                     'label': 'Repeat Password'
                 }) }}
                 {{ form_row(form.phone) }}
                 {{ form_row(form.address) }}
 
-                <button type="submit" class="btn btn-primary" formnovalidate>Register</button>
+                <button class="btn btn-primary" formnovalidate>Register <span class="glyphicon glyphicon-arrow-right"></span></button>
                 {{ form_end(form) }}
             </div>
         </div>

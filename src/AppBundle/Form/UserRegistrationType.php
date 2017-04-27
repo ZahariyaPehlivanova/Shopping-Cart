@@ -19,7 +19,7 @@ class UserRegistrationType extends AbstractType
             ->add('lastName', TextType::class)
             ->add('username', TextType::class)
             ->add('email', EmailType::class)
-            ->add('password', RepeatedType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
             ])

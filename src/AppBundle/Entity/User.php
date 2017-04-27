@@ -49,12 +49,14 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @Assert\NotBlank(message="The password cannot be empty!")
-     * @Assert\Length(min="3", minMessage="The password must be at least 3 symbols long!")
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
 
+    /**
+     * @Assert\NotBlank(message="The password cannot be empty!")
+     * @Assert\Length(min="3", minMessage="The password must be at least 3 symbols long!")
+     */
     private $plainPassword;
 
     /**
@@ -312,7 +314,6 @@ class User implements UserInterface
 
     public function getSalt()
     {
-
     }
 
     public function eraseCredentials()
