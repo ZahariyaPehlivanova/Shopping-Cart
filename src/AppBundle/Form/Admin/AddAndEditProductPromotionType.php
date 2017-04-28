@@ -18,8 +18,14 @@ class AddAndEditProductPromotionType extends AbstractType
     {
         $builder->add('name', TextType::class)
             ->add('discount', NumberType::class)
-            ->add('start_date', DateType::class)
-            ->add('end_date', DateType::class)
+            ->add('start_date', DateType::class,[
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+            ])
+            ->add('end_date', DateType::class, [
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+            ])
             ->add("products", EntityType::class, [
                 "class" => 'AppBundle\Entity\Product',
                 "multiple" => true,

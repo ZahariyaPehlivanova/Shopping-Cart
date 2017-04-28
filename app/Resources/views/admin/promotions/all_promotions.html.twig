@@ -114,36 +114,4 @@
     {% else %}
         <p id="emptyAnnotation">No all products promotions</p>
     {% endif %}
-
-    <h1>Deleted</h1>
-    {% if deletedPromotions|length > 0 %}
-    <table class="table table-responsive table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Discount</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for promotion in deletedPromotions %}
-            <tr>
-                <td>{{ promotion.id }}</td>
-                <td>{{ promotion.name }}</td>
-                <td>{{ promotion.discount }}</td>
-                {#<td>#}
-                    {#<a href="{{ path("admin_edit_promotion", {"id": promotion.id}) }}" class="btn btn-warning">Edit</a>#}
-                {#</td>#}
-                <td>
-                    <form action="{{ path("admin_restore_promotion", {"id": promotion.id}) }}" method="post">
-                        <button class="btn btn-info" type="submit">Restore</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p id="emptyAnnotation">No deleted promotions</p>
-    {% endif %}
 {% endblock %}

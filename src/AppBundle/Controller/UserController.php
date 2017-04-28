@@ -22,13 +22,6 @@ class UserController extends Controller
      */
     public function registerAction()
     {
-//        if($this->getUser()){
-//            $this->addFlash("error", "You are already have registration and you are logged in!");
-//            return $this->redirectToRoute("allProducts");
-//        }
-//
-//        $form = $this->createForm(UserRegistrationType::class);
-//        return $this->render('user/register.html.twig', ['form' => $form->createView()]);
         if ($this->get("security.authorization_checker")->isGranted("ROLE_USER")) {
             return $this->redirectToRoute("allProducts");
         }
@@ -39,53 +32,6 @@ class UserController extends Controller
             "form" => $form->createView()
         ]);
     }
-
-//    /**
-//     * @Route("/register", name="user_register_process")
-//     * @Method("POST")
-//     *
-//     * @param Request $request
-//     * @return Response
-//     */
-//    public function registerProcessAction(Request $request)
-//    {
-//        if ($this->get("security.authorization_checker")->isGranted("ROLE_USER")) {
-//            return $this->redirectToRoute("allProducts");
-//        }
-//
-//        $user = new User();
-//        $em = $this->getDoctrine()->getManager();
-//        $userRole = $em->getRepository(Role::class)
-//            ->findOneBy(["name" => "ROLE_USER"]);
-//
-//        $user->addRole($userRole);
-//
-//        $form = $this->createForm(UserRegistrationType::class, $user);
-//        $form->handleRequest($request);
-//        if ($form->isValid() && $form->isSubmitted()) {
-//            /** @var User $user */
-//            $user = $form->getData();
-//
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($user);
-//            $em->flush();
-//
-//            return $this->get("security.authentication.guard_handler")
-//                ->authenticateUserAndHandleSuccess(
-//                    $user,
-//                    $request,
-//                    $this->get("app.security.login_form_authenticator"),
-//                    "main"
-//                );
-//        }
-//        echo "error";
-//        die();
-//
-//        return $this->render(":user:register.html.twig", [
-//            "form" => $form->createView()
-//        ]);
-//    }
-
 
     /**
      * @Route("/register", name="user_register_process")

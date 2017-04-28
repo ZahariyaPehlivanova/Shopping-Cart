@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Product;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -24,7 +25,7 @@ class AddProductType extends AbstractType
                 'data_class' => null,
                 'required' => false,
             ] )
-            ->add('price', MoneyType::class)
+            ->add('price', NumberType::class)
             ->add("category", EntityType::class, [
                 "class" => 'AppBundle\Entity\Category',
                 "placeholder" => 'Select',
@@ -33,7 +34,7 @@ class AddProductType extends AbstractType
             ->add("promotions", EntityType::class, [
                 "class" => 'AppBundle\Entity\Promotion',
                 "multiple" => true,
-                "expanded" => true
+                "expanded" => true,
             ]);
     }
 

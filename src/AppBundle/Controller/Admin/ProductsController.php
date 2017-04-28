@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Form\Admin\ChangeOrderType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Product;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductsController extends Controller

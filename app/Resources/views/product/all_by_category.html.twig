@@ -13,7 +13,7 @@
                     <main class="col-md-9">
                         {% for product in products %}
                             <div class="col-sm-6 col-md-4">
-                                <div class="thumbnail" style="width: 250px;height: 470px">
+                                <div class="thumbnail" style="width: 250px;height: 480px">
                                     <p><img src="/images/product/{{ product.image}}" style="width: 240px; height: 230px; text-align: center"/></p>
                                     <p><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></p>
                                     <p>Rating: {{ product.rating / 6 }}</p>

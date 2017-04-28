@@ -23,12 +23,10 @@ class PromotionsController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository(Promotion::class);
         $activePromotions = $repository->findAllActivePromotions();
-        $deletedPromotions = $repository->findAllDeletedPromotions();
         $allProducts = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
 
         return $this->render(":admin/promotions:all_promotions.html.twig", [
             "activePromotions" => $activePromotions,
-            "deletedPromotions" => $deletedPromotions,
             "allProducts" => $allProducts
         ]);
     }
@@ -50,6 +48,7 @@ class PromotionsController extends Controller
 
             $this->addPromoForEachProduct($em, $products, $promotion);
 
+            $promotion->setIsProductPromo(true);
             $em->persist($promotion);
             $em->flush();
 
@@ -104,8 +103,6 @@ class PromotionsController extends Controller
             /** @var Product[]|ArrayCollection $products */
             $products = $promotion->getProducts();
             foreach ($products as $product){
-                $realPrice = $product->getPrice();
-                $product->setPromotionPrice($realPrice);
                 $product->getPromotions()->removeElement($promotion);
 
                 $em->persist($product);
@@ -146,7 +143,7 @@ class PromotionsController extends Controller
 
                 $em->persist($category);
             }
-
+            $promotion->setIsCategoryPromo(true);
             $em->persist($promotion);
             $em->flush();
 
@@ -176,6 +173,7 @@ class PromotionsController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $categories = $promotion->getCategories();
+
             foreach ($categories as $category)
             {
                 if(!$category->getPromotions()->contains($promotion)){
@@ -192,7 +190,6 @@ class PromotionsController extends Controller
 
             $em->persist($promotion);
             $em->flush();
-
             $this->get('session')->getFlashBag()->add('success', 'Promotion edited successfully!');
 
             return $this->redirectToRoute('get_all_promotions');
@@ -217,8 +214,6 @@ class PromotionsController extends Controller
             /** @var Product[]|ArrayCollection $products */
             $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
             foreach ($products as $product){
-                $realPrice = $product->getPrice();
-                $product->setPromotionPrice($realPrice);
                 $product->getPromotions()->removeElement($promotion);
                 $em->persist($product);
             }
@@ -253,6 +248,7 @@ class PromotionsController extends Controller
 
             $this->addPromoForEachProduct($em, $products, $promotion);
 
+            $promotion->setIsAllProductsPromo(true);
             $em->persist($promotion);
             $em->flush();
 
@@ -310,8 +306,6 @@ class PromotionsController extends Controller
         /** @var Product[]|ArrayCollection $products */
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
         foreach ($products as $product){
-            $realPrice = $product->getPrice();
-            $product->setPromotionPrice($realPrice);
             $product->getPromotions()->removeElement($promotion);
             $em->persist($product);
         }
@@ -321,21 +315,6 @@ class PromotionsController extends Controller
         $em->flush();
 
         $this->addFlash("success", "Promotion {$promotion->getName()} deleted successfully!");
-
-        return $this->redirectToRoute("get_all_promotions");
-    }
-
-    /**
-     * @Route("admin/restore/promotion/{id}", name="admin_restore_promotion")
-     */
-    public function restorePromotionAction(Promotion $promotion)
-    {
-        $promotion->setIsDeleted(false);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($promotion);
-        $em->flush();
-
-        $this->addFlash("success", "Promotion {$promotion->getName()} restored successfully!");
 
         return $this->redirectToRoute("get_all_promotions");
     }

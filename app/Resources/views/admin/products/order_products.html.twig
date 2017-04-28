@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.orderBy) }}
+    {{ form_row(form.criteria) }}
+    <hr>
+
+    <button class="btn btn-info" formnovalidate>Reorder<span class="glyphicon glyphicon-edit"></span>
+    </button>
+
+    {{ form_end(form) }}
+{% endblock %}

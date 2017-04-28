@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\ProductsOrder;
 use AppBundle\Entity\Review;
 use AppBundle\Form\AddProductType;
+use AppBundle\Form\Admin\ChangeOrderType;
 use AppBundle\Form\ProductEditType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,7 +31,7 @@ class ProductController extends Controller
     public function listAllProductsAction(Request $request)
     {
         /** @var Product[]|ArrayCollection $products */
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
+        $products = $this->getOrderedProducts();
 
         $calc = $this->get('price_calculator');
         $em = $this->getDoctrine()->getManager();
@@ -59,9 +61,19 @@ class ProductController extends Controller
      */
     public function productsByCategoryAction(Category $category, Request $request)
     {
-        $pager = $this->get('knp_paginator');
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
+        /** @var Product[]|ArrayCollection $products */
+        $products = $this->getOrderedProductsByCategory($category);
 
+        $calc = $this->get('price_calculator');
+        $em = $this->getDoctrine()->getManager();
+        foreach ($products as $product){
+            $promoPrice = $calc->calcPrice($product);
+            $product->setPromotionPrice($promoPrice);
+            $em->persist($product);
+        }
+        $em->flush();
+
+        $pager = $this->get('knp_paginator');
         $products = $pager->paginate(
             $products,
             $request->query->getInt('page', 1),
@@ -220,6 +232,40 @@ class ProductController extends Controller
         $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
         $isSeller = $product->getSeller()->getId() == $this->getUser()->getId();
         return $isAdmin || $isEditor || $isSeller;
+    }
+
+    private  function getOrderedProducts(){
+        $products = null;
+        /** @var ProductsOrder[] $orders*/
+        $orders = $this->getDoctrine()->getRepository(ProductsOrder::class)->findAll();
+        if(count($orders) > 0) {
+
+            /** @var ProductsOrder $order*/
+            $order = $orders[0];
+            $orderBy = $order->getOrderBy();
+            $criteria = $order->getCriteria();
+            $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts($orderBy, $criteria);
+        }else{
+            $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
+        }
+        return $products;
+    }
+
+    private  function getOrderedProductsByCategory(Category $category){
+        $products = null;
+        /** @var ProductsOrder[] $orders*/
+        $orders = $this->getDoctrine()->getRepository(ProductsOrder::class)->findAll();
+        if(count($orders) > 0) {
+
+            /** @var ProductsOrder $order*/
+            $order = $orders[0];
+            $orderBy = $order->getOrderBy();
+            $criteria = $order->getCriteria();
+            $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category, $orderBy, $criteria);
+        }else{
+            $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProductsByCategory($category);
+        }
+        return $products;
     }
 }
 

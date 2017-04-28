@@ -27,6 +27,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank(message="The name of the product cannot be empty!")
      */
     private $name;
 
@@ -34,6 +35,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Assert\NotBlank(message="The description of the product cannot be empty!")
      */
     private $description;
 
@@ -47,6 +49,8 @@ class Product
      * @var int
      *
      * @ORM\Column(name="quantity", type="integer")
+     * @Assert\NotBlank(message="The quantity of the product cannot be empty!")
+     * @Assert\Range(min="0",minMessage="The quantity must be greater than 0")
      */
     private $quantity;
 
@@ -59,6 +63,7 @@ class Product
 
     /**
      * @Assert\Image(mimeTypes={"image/png", "image/jpeg"}, maxSize="5M")
+     * @Assert\NotBlank(message="You must choose an image!")
      */
     private $image_form;
 
@@ -66,6 +71,8 @@ class Product
      * @var string
      *
      * @ORM\Column(name="price", type="decimal", precision=11, scale=2)
+     * @Assert\NotBlank(message="The price of the product cannot be empty!")
+     * @Assert\Range(min="0",minMessage="The price must be greater than 0")
      */
     private $price;
 
@@ -107,7 +114,7 @@ class Product
     /**
      * @var Category $category
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="products")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="You must choose a category!")
      */
     private $category;
 

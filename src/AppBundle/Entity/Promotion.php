@@ -91,11 +91,35 @@ class Promotion
      */
     private $categories;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_category_promo", type="boolean")
+     */
+    private $isCategoryPromo;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_all_products_promo", type="boolean")
+     */
+    private $isAllProductsPromo;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_product_promo", type="boolean")
+     */
+    private $isProductPromo;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->isDeleted = false;
+        $this->isProductPromo = false;
+        $this->isCategoryPromo = false;
+        $this->isAllProductsPromo = false;
     }
 
     /**
@@ -145,22 +169,6 @@ class Promotion
     {
         $this->discount = $discount;
     }
-//
-//    /**
-//     * @return \DateTime
-//     */
-//    public function getDuration()
-//    {
-//        return $this->duration;
-//    }
-//
-//    /**
-//     * @param \DateTime $duration
-//     */
-//    public function setDuration($duration)
-//    {
-//        $this->duration = $duration;
-//    }
 
     /**
      * @return bool
@@ -240,6 +248,54 @@ class Promotion
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsCategoryPromo()
+    {
+        return $this->isCategoryPromo;
+    }
+
+    /**
+     * @param bool $isCategoryPromo
+     */
+    public function setIsCategoryPromo($isCategoryPromo)
+    {
+        $this->isCategoryPromo = $isCategoryPromo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsAllProductsPromo()
+    {
+        return $this->isAllProductsPromo;
+    }
+
+    /**
+     * @param bool $isAllProductsPromo
+     */
+    public function setIsAllProductsPromo($isAllProductsPromo)
+    {
+        $this->isAllProductsPromo = $isAllProductsPromo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIsProductPromo()
+    {
+        return $this->isProductPromo;
+    }
+
+    /**
+     * @param bool $isProductPromo
+     */
+    public function setIsProductPromo($isProductPromo)
+    {
+        $this->isProductPromo = $isProductPromo;
     }
 
     public function __toString()
