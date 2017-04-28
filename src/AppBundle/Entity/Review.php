@@ -26,7 +26,7 @@ class Review
      * @var string
      *
      * @ORM\Column(name="comment", type="text")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="The comment cannot be empty!")
      */
     private $comment;
 
@@ -34,7 +34,7 @@ class Review
      * @var int
      *
      * @ORM\Column(name="rating", type="integer")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="You must give a rate!")
      * @Assert\Range(min="1", max="6")
      */
     private $rating;

@@ -20,7 +20,8 @@
             </thead>
             <tbody>
             {% for promotion in activePromotions %}
-                {% if promotion.categories|length > 0 %}
+               {# {% if promotion.categories|length > 0 %}#}
+                {% if promotion.isCategoryPromo == true %}
                     <tr>
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
@@ -57,7 +58,8 @@
             </thead>
             <tbody>
             {% for promotion in activePromotions %}
-                {% if promotion.products|length > 0 and promotion.products|length != allProducts|length and promotion.categories|length == 0 %}
+                {#{% if promotion.products|length > 0 and promotion.products|length != allProducts|length and promotion.categories|length == 0 %}#}
+                {% if promotion.isProductPromo == true %}
                     <tr>
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
@@ -93,7 +95,8 @@
             </thead>
             <tbody>
             {% for promotion in activePromotions %}
-                {% if promotion.categories|length == 0 and promotion.products|length == allProducts|length%}
+                {#{% if promotion.categories|length == 0 and promotion.products|length == allProducts|length%}#}
+                {% if promotion.isAllProductsPromo == true %}
                     <tr>
                         <td>{{ promotion.id }}</td>
                         <td>{{ promotion.name }}</td>
@@ -114,4 +117,5 @@
     {% else %}
         <p id="emptyAnnotation">No all products promotions</p>
     {% endif %}
+
 {% endblock %}

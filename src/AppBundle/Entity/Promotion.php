@@ -27,7 +27,7 @@ class Promotion
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="The name of the promotion cannot be empty!")
      * @Assert\Length(min="3", minMessage="Promotion name must be at least 3 symbols long.")
      */
     private $name;
@@ -36,28 +36,18 @@ class Promotion
      * @var int
      *
      * @ORM\Column(name="discount", type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Range(min="1", max="99")
+     * @Assert\NotBlank(message="You must enter a discount!")
+     * @Assert\Range(min="1", max="99", minMessage="The discount must be greater than 0!", maxMessage="The discount cannot be greater than 99!")
      * @Assert\Regex("/\d{1,2}/")
      */
     private $discount;
-
-//    /**
-//     * @var \DateTime
-//     *
-//     * @ORM\Column(name="duration", type="datetime")
-//     * @Assert\GreaterThan("today")
-//     * @Assert\NotBlank()
-//     * @Assert\Date()
-//     */
-//    private $duration;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_date", type="date")
-     * @Assert\NotBlank()
-     * @Assert\Date()
+     * @Assert\NotBlank(message="You must choose a start date!")
+     * @Assert\Date(message="Not a valid date!")
      */
     private $startDate;
 
@@ -65,8 +55,8 @@ class Promotion
      * @var \DateTime
      *
      * @ORM\Column(name="end_date", type="date")
-     * @Assert\NotBlank()
-     * @Assert\Date()
+     * @Assert\NotBlank(message="You must choose an end date!")
+     * @Assert\Date(message="Not a valid date!")
      */
     private $endDate;
 

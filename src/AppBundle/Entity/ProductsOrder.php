@@ -24,17 +24,17 @@ class ProductsOrder
 
     /**
      * @var string
-     *
+     * @Assert\NotNull(message="You must choose by what to order!")
      * @ORM\Column(name="orderBy", type="string", length=255, unique=true)
-     * @Assert\NotNull()
      */
     private $orderBy;
 
     /**
      * @var string
      *
+     * @Assert\NotNull(message="You must choose a criteria!")
+     *
      * @ORM\Column(name="criteria", type="string", length=255)
-     * @Assert\NotNull()
      */
     private $criteria;
 

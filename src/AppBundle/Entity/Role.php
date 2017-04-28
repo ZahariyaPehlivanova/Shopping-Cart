@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Role
@@ -25,7 +26,7 @@ class Role implements RoleInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="The name of the role cannot be empty!")
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;

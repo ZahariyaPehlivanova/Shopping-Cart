@@ -35,6 +35,10 @@ class AddProductType extends AbstractType
                 "class" => 'AppBundle\Entity\Promotion',
                 "multiple" => true,
                 "expanded" => true,
+                "query_builder" => function (EntityRepository $er) {
+                    return $er->createQueryBuilder("promotion")
+                        ->where("promotion.isProductPromo = true");
+                }
             ]);
     }
 
