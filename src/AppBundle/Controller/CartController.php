@@ -45,7 +45,7 @@ class CartController extends Controller
      */
     public function addToCartAction(Product $product)
     {
-        if($this->hasUserRole()){
+        if(!$this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }
@@ -79,7 +79,7 @@ class CartController extends Controller
      */
     public function removeFromCartAction(Product $product)
     {
-        if($this->hasUserRole()){
+        if(!$this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }
@@ -90,9 +90,9 @@ class CartController extends Controller
 
         $quantity = $product->getQuantity();
         $product->setQuantity($quantity += 1);
+        $em->persist($product);
 
         $em->persist($user);
-        $em->persist($product);
         $em->flush();
 
         $productName = $product->getName();
@@ -107,7 +107,7 @@ class CartController extends Controller
      */
     public function checkoutCartAction()
     {
-        if($this->hasUserRole()){
+        if(!$this->hasUserRole()){
             $this->addFlash("danger", "You are admin/editor. You don't have a cart!");
             return $this->redirectToRoute("user_profile", ["id" => $this->getUser()->getId()]);
         }

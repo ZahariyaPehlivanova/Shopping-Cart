@@ -16,6 +16,10 @@ class CategoriesController extends Controller
      */
     public function allCategoriesAction()
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to see the categories!");
+            return $this->redirectToRoute("allProducts");
+        }
         $activeCategories = $this->getDoctrine()->getRepository(Category::class)->findAllActiveCategories();
         $deletedCategories = $this->getDoctrine()->getRepository(Category::class)->findAllDeletedCategories();
 
@@ -31,6 +35,10 @@ class CategoriesController extends Controller
      */
     public function addCategoryAction(Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to add categories!");
+            return $this->redirectToRoute("allProducts");
+        }
         $category = new Category();
         $form = $this->createForm(AddAndEditCategoryType::class, $category);
         $form->handleRequest($request);
@@ -58,6 +66,11 @@ class CategoriesController extends Controller
      */
     public function editCategoryAction(Category $category, Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to edit categories!");
+            return $this->redirectToRoute("allProducts");
+        }
+
         $form = $this->createForm(AddAndEditCategoryType::class, $category);
         $form->handleRequest($request);
 
@@ -81,6 +94,11 @@ class CategoriesController extends Controller
      */
     public function restoreCategoryAction(Category $category)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to restore categories!");
+            return $this->redirectToRoute("allProducts");
+        }
+
         $category->setIsDeleted(false);
         $em = $this->getDoctrine()->getManager();
         $em->persist($category);
@@ -96,6 +114,10 @@ class CategoriesController extends Controller
      */
     public function deleteCategoryAction(Category $category)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to delete categories!");
+            return $this->redirectToRoute("allProducts");
+        }
         $category->setIsDeleted(true);
         $em = $this->getDoctrine()->getManager();
         $em->persist($category);
@@ -104,5 +126,11 @@ class CategoriesController extends Controller
         $this->addFlash("success", "Category {$category->getName()} deleted successfully!");
 
         return $this->redirectToRoute("get_all_categories");
+    }
+
+    private function isAuthenticated(){
+        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
+        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
+        return $isAdmin || $isEditor;
     }
 }

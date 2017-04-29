@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
 {% if products|length > 0 %}
 <div>
@@ -16,7 +15,7 @@
                    <div class="thumbnail" style="width: 250px;height: 480px">
                        <p><img src="/images/product/{{ product.image}}" style="width: 240px; height: 230px; text-align: center"/></p>
                        <p><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></p>
-                       <p>Rating: {{ product.rating / 6 }}</p>
+                       <p>Rating: {{ (product.rating / 6)|number_format(1, '.', ',') }}</p>
                        <p>Items left: {{ product.quantity }}</p>
                        {% if product.price != product.promotionPrice %}
                            <p>Price: <strike>{{ product.price }} lv.</strike></p>

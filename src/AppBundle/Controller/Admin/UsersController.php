@@ -68,11 +68,25 @@ class UsersController extends Controller
             $this->addFlash("error", "You are not allowed to delete this user!");
             return $this->redirectToRoute("allProducts");
         }
+        if($user->getUsername() === "admin"){
+            $this->addFlash("error", "You are cannot delete the admin!");
+            return $this->redirectToRoute("get_all_users");
+        }
+
         $reviews = $user->getReviews();
         foreach ($reviews as $review){
             $this->removeUserReviewAction($review, $user);
         }
         $em = $this->getDoctrine()->getManager();
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAllProductsByAuthor($user->getUsername());
+        foreach ($products as $product){
+            foreach ($product->getReviews() as $review){
+                $em->remove($review);
+            }
+            $em->flush();
+            $em->remove($product);
+            $em->flush();
+        }
         $em->remove($user);
         $em->flush();
 

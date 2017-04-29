@@ -15,6 +15,16 @@ class AdminController extends Controller
      */
     public function indexAction()
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to see admin's actions!");
+            return $this->redirectToRoute("allProducts");
+        }
         return $this->render(":admin:home.html.twig");
+    }
+
+    private function isAuthenticated(){
+        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
+        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
+        return $isAdmin || $isEditor;
     }
 }

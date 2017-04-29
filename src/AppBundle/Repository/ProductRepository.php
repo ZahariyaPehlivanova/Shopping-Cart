@@ -102,6 +102,16 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         }
     }
 
+    public function findAllProductsByAuthor($username)
+    {
+        return $this->createQueryBuilder('product')
+            ->join('product.seller', 'seller')
+            ->andWhere('seller.username = :author')
+            ->setParameter('author', $username)
+            ->getQuery()
+            ->execute();
+    }
+
     public function findAllOutOfStockProducts()
     {
         return $this->createQueryBuilder('product')

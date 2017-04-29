@@ -21,6 +21,11 @@ class PromotionsController extends Controller
      */
     public function allPromotionsAction()
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to see the promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
+
         $repository = $this->getDoctrine()->getRepository(Promotion::class);
         $activePromotions = $repository->findAllActivePromotions();
         $allProducts = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
@@ -37,6 +42,10 @@ class PromotionsController extends Controller
      */
     public function addProductPromotionAction(Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to add promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $promotion = new Promotion();
         $form = $this->createForm(AddAndEditProductPromotionType::class, $promotion);
         $form->handleRequest($request);
@@ -69,6 +78,10 @@ class PromotionsController extends Controller
      */
     public function editProductPromotionAction(Promotion $promotion, Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to edit promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $form = $this->createForm(AddAndEditProductPromotionType::class, $promotion);
         $form->handleRequest($request);
 
@@ -99,6 +112,10 @@ class PromotionsController extends Controller
      */
     public function deleteProductPromotionAction(Promotion $promotion)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to delete promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $em = $this->getDoctrine()->getManager();
             /** @var Product[]|ArrayCollection $products */
             $products = $promotion->getProducts();
@@ -123,6 +140,10 @@ class PromotionsController extends Controller
      */
     public function addCategoryPromotionAction(Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to add promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $promotion = new Promotion();
         $form = $this->createForm(AddAndEditCategoryPromotionType::class, $promotion);
         $form->handleRequest($request);
@@ -165,6 +186,10 @@ class PromotionsController extends Controller
      */
     public function editCategoryPromotionAction(Promotion $promotion, Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to edit promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $form = $this->createForm(AddAndEditCategoryPromotionType::class, $promotion);
         $form->handleRequest($request);
 
@@ -207,6 +232,10 @@ class PromotionsController extends Controller
      */
     public function deleteCategoryPromotionAction(Promotion $promotion)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to delete promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $em = $this->getDoctrine()->getManager();
         /** @var Category[]|ArrayCollection $categories */
         $categories = $promotion->getCategories();
@@ -235,6 +264,10 @@ class PromotionsController extends Controller
      */
     public function addAllProductsPromotionAction(Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to add promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $promotion = new Promotion();
         $form = $this->createForm(AddAndEditAllProductsPromotionType::class, $promotion);
         $form->handleRequest($request);
@@ -270,6 +303,10 @@ class PromotionsController extends Controller
      */
     public function editAllProductsPromotionAction(Promotion $promotion, Request $request)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to edit promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $form = $this->createForm(AddAndEditAllProductsPromotionType::class, $promotion);
         $form->handleRequest($request);
 
@@ -302,6 +339,10 @@ class PromotionsController extends Controller
      */
     public function deleteAllProductsPromotionAction(Promotion $promotion)
     {
+        if(!$this->isAuthenticated()){
+            $this->addFlash("error", "You are not allowed to delete promotions!");
+            return $this->redirectToRoute("allProducts");
+        }
         $em = $this->getDoctrine()->getManager();
         /** @var Product[]|ArrayCollection $products */
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();
@@ -326,5 +367,11 @@ class PromotionsController extends Controller
             }
             $em->persist($product);
         }
+    }
+
+    private function isAuthenticated(){
+        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
+        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
+        return $isAdmin || $isEditor;
     }
 }

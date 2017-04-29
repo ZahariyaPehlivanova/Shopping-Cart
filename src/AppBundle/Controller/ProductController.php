@@ -7,7 +7,6 @@ use AppBundle\Entity\Product;
 use AppBundle\Entity\ProductsOrder;
 use AppBundle\Entity\Review;
 use AppBundle\Form\AddProductType;
-use AppBundle\Form\Admin\ChangeOrderType;
 use AppBundle\Form\ProductEditType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -218,7 +217,13 @@ class ProductController extends Controller
            $this->addFlash("error", "You are not allowed to delete this product!");
            return $this->redirectToRoute("allProducts");
        }
-        $em = $this->getDoctrine()->getManager();
+
+       $em = $this->getDoctrine()->getManager();
+       foreach ($product->getReviews() as $review){
+           $em->remove($review);
+       }
+
+        $em->flush();
         $em->remove($product);
         $em->flush();
 
@@ -239,11 +244,11 @@ class ProductController extends Controller
         /** @var ProductsOrder[] $orders*/
         $orders = $this->getDoctrine()->getRepository(ProductsOrder::class)->findAll();
         if(count($orders) > 0) {
-
             /** @var ProductsOrder $order*/
             $order = $orders[0];
             $orderBy = $order->getOrderBy();
             $criteria = $order->getCriteria();
+
             $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts($orderBy, $criteria);
         }else{
             $products = $this->getDoctrine()->getRepository(Product::class)->findAllActiveProducts();

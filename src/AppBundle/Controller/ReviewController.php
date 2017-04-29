@@ -50,4 +50,39 @@ class ReviewController extends Controller
             "form" => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("review/remove/{id}", name="remove_review")
+     */
+    public function removeReviewAction(Review $review)
+    {
+        if(!$this->isAuthenticated($review)){
+            $this->addFlash("error", "You are not allowed to remove user's review!");
+            return $this->redirectToRoute("allProducts");
+        }
+
+        $user = $this->getUser();
+        $user->getReviews()->removeElement($review);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->remove($review);
+        $product = $review->getProduct();
+        $oldRating = $product->getRating();
+        $product->setRating($oldRating - $review->getRating());
+
+        $em->persist($product);
+        $em->flush();
+
+        $this->addFlash("success", "Review removed successfully!");
+
+        return $this->redirectToRoute("allProducts");
+    }
+
+    private function isAuthenticated(Review $review){
+        $isAdmin = $this->isGranted('ROLE_ADMIN', $this->getUser());
+        $isEditor = $this->isGranted('ROLE_EDITOR', $this->getUser());
+        $isAuthor = $review->getAuthor()->getId() == $this->getUser()->getId();
+        return $isAdmin || $isEditor || $isAuthor;
+    }
 }

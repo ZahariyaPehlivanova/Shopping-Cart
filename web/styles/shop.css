@@ -70,7 +70,7 @@ a:hover, a:active{
     margin: 10px;
 }
 
-#currentReview p:last-child{
+#reviewDate{
     color: darkgray;
     font-weight: bold;
     text-align: right;

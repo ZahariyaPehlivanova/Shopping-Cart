@@ -19,7 +19,7 @@
                 {% endif %}
             </div>
 
-            <div id="rating">Rating {{ product.rating / 6 }} / 6</div>
+            <div id="rating">Rating {{ (product.rating / 6) |number_format(2, '.', ',') }} / 6</div>
 
             <div class="row" id="productDetails">
                 <div><img src="/images/product/{{ product.image}}" style="width: 450px; height: 400px;"/></div>
@@ -76,7 +76,16 @@
                         <div id="currentReview">
                             <p>{{ review.author.username }}:</p>
                             <p> {{ review.comment }}</p>
-                            <p> {{ review.addedOn|date('Y-m-d H:i:s') }}</p>
+                            <p id="reviewDate"> {{ review.addedOn|date('Y-m-d H:i:s') }}</p>
+                            {% if app.user %}
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') or review.author.id == app.user.id %}
+                                <p>
+                                    <form action="{{ path("remove_review", {"id": review.id}) }}" method="post">
+                                        <button class="btn btn-danger delete-item" type="submit">Delete review</button>
+                                    </form>
+                                </p>
+                            {% endif %}
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
