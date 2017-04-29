@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="container">
     {% if reviews|length > 0 %}
         <div>
             <h1> {{ user.username }} reviews</h1>
@@ -38,7 +39,8 @@
                 </div>
             </div>
         </div>
-{% else %}
-    <p id="emptyAnnotation">No reviews to show</p>
-{% endif %}
+    {% else %}
+        <p id="emptyAnnotation">No reviews to show</p>
+    {% endif %}
+</div>
 {% endblock %}

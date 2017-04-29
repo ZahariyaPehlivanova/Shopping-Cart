@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
     {% if users|length > 0 %}
     <table class="table table-responsive table-striped">
         <thead>
@@ -49,4 +50,5 @@
     {% else %}
         <p id="emptyAnnotation">No users</p>
     {% endif %}
+    </div>
 {% endblock %}

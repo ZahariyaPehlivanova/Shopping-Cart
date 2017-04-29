@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <a href="{{ path("admin_add_category") }}" class="btn btn-info">Add new category</a>
-
+    <div class="text-right">
+        <a href="{{ path("admin_add_category") }}" class="btn btn-info">Add new category</a>
+    </div>
+<div class="container">
     <h1>Active</h1>
     {% if activeCategories|length > 0 %}
     <table class="table table-responsive table-striped">
@@ -31,7 +32,7 @@
         </tbody>
     </table>
     {% else %}
-        <h3>No active categories!</h3>
+    <p id="emptyAnnotation">No active categories</p>
     {% endif %}
 
     <h1>Deleted</h1>
@@ -48,10 +49,10 @@
             <tr>
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
-                <td>
+                <td class="actions">
                     <a href="{{ path("admin_edit_category", {"id": category.id}) }}" class="btn btn-warning">Edit</a>
                 </td>
-                <td>
+                <td class="actions">
                     <form action="{{ path("admin_restore_category", {"id": category.id}) }}" method="post">
                         <button class="btn btn-info" type="submit">Restore</button>
                     </form>
@@ -63,4 +64,5 @@
     {% else %}
         <p id="emptyAnnotation">No deleted categories</p>
     {% endif %}
+</div>
 {% endblock %}

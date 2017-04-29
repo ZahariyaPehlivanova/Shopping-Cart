@@ -1,14 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
     {{ form_start(form) }}
 
     {{ form_start(form) }}
-    {{ form_row(form.name) }}
+    {{ form_row(form.name,{ 'label': 'Category name' }) }}
   <hr>
 
   <button class="btn btn-warning" formnovalidate>Edit <span class="glyphicon glyphicon-edit"></span>
   </button>
 
     {{ form_end(form) }}
+    </div>
 {% endblock %}

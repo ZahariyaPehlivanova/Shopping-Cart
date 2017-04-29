@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
     {% if products|length > 0 %}
         <div>
             <div class="container">
@@ -51,6 +52,7 @@
     {% else %}
         <p id="emptyAnnotation">Empty category</p>
     {% endif %}
+    </div>
 {% endblock %}
 
 

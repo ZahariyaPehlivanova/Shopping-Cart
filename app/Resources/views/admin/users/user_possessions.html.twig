@@ -1,46 +1,48 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="container">
 {% if products|length > 0 %}
-<div>
-    <h1>{{ user.username }} possessions</h1>
-       <div class="container">
-           <div class="row">
-           <main class="col-md-9">
-           <table class="table table-responsive table-striped">
-               <thead>
-               <tr>
-                   <th>#</th>
-                   <th>Image</th>
-                   <th>Name</th>
-                   <th>Description</th>
-                   <th>Price</th>
-                   <th>Seller</th>
-               </tr>
-               </thead>
-               <tbody>
-               {% for product in products %}
+    <div>
+        <h1>{{ user.username }} possessions</h1>
+           <div class="container">
+               <div class="row">
+               <main class="col-md-9">
+               <table class="table table-responsive table-striped">
+                   <thead>
                    <tr>
-                       <td>{{ product.id }}</td>
-                       <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
-                       <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
-                       <td>{{ product.description }}</td>
-                       <td>{{ product.price }}</td>
-                       <td>{{ product.seller.username }}</td>
-                       <td>
-                           <form action="{{ path("remove_user_possession", {"id": product.id, "user": user.id}) }}" method="post">
-                           <button class="btn btn-danger delete-item" type="submit">Delete possession</button>
-                       </form>
-                      </td>
+                       <th>#</th>
+                       <th>Image</th>
+                       <th>Name</th>
+                       <th>Description</th>
+                       <th>Price</th>
+                       <th>Seller</th>
                    </tr>
-               {% endfor %}
-               </tbody>
-           </table>
-           </main>
+                   </thead>
+                   <tbody>
+                   {% for product in products %}
+                       <tr>
+                           <td>{{ product.id }}</td>
+                           <td><img src="/images/product/{{ product.image}}" style="width: 50px;"/></td>
+                           <td><a href="{{ path("product_details", {"id": product.id}) }}" >{{ product.name }}</a></td>
+                           <td>{{ product.description }}</td>
+                           <td>{{ product.price }}</td>
+                           <td>{{ product.seller.username }}</td>
+                           <td>
+                               <form action="{{ path("remove_user_possession", {"id": product.id, "user": user.id}) }}" method="post">
+                               <button class="btn btn-danger delete-item" type="submit">Delete possession</button>
+                           </form>
+                          </td>
+                       </tr>
+                   {% endfor %}
+                   </tbody>
+               </table>
+               </main>
+               </div>
            </div>
-       </div>
+    </div>
+    {% else %}
+        <p id="emptyAnnotation">No possessions to show</p>
+    {% endif %}
 </div>
-{% else %}
-    <p id="emptyAnnotation">No possessions to show</p>
-{% endif %}
 {% endblock %}

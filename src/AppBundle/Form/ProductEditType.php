@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\ORM\EntityRepository;
 
 
 class ProductEditType extends AbstractType
@@ -35,7 +36,11 @@ class ProductEditType extends AbstractType
             ->add("promotions", EntityType::class, [
                 "class" => 'AppBundle\Entity\Promotion',
                 "multiple" => true,
-                "expanded" => true
+                "expanded" => true,
+                "query_builder" => function (EntityRepository $er) {
+                    return $er->createQueryBuilder("promotion")
+                        ->where("promotion.isProductPromo = true");
+                }
             ]);
     }
 

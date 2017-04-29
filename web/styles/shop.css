@@ -77,6 +77,11 @@ a:hover, a:active{
     float: right;
 }
 
+.actions{
+    text-align: right;
+    float: right;
+}
+
 #rating{
     background-color: #a94442;
     height: 23px;

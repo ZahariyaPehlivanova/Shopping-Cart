@@ -37,6 +37,7 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="The username cannot be empty!")
+     * @Assert\Length(min="3", minMessage="The username must be at least 3 symbols!")
      * @ORM\Column(name="username", type="string", length=255, unique=true)
      */
     private $username;
